@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npm install *)",
+      "Bash(npx @nestjs/cli start --watch)",
+      "Bash(npx next *)",
+      "Bash(node_modules/.bin/nest start *)",
+      "Bash(node_modules/.bin/next dev *)",
+      "Bash(curl -s http://localhost:5000/api/auth/me -o /dev/null -w \"%{http_code}\")",
+      "Bash(curl -s http://localhost:3001 -o /dev/null -w \"%{http_code}\")"
+    ]
+  }
+}
