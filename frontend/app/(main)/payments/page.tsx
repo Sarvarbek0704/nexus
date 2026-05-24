@@ -91,7 +91,7 @@ export default function PaymentsPage() {
       return;
     }
     try {
-      await withdraw({ amount, method: "bank" }).unwrap();
+      await withdraw({ amount, method: "bank_transfer" }).unwrap();
       toast.success(`$${amount.toFixed(2)} withdrawal initiated!`);
       setWithdrawAmount("");
       setShowWithdraw(false);

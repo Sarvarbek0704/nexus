@@ -51,7 +51,8 @@ export class ContractsService {
   async getMyContracts(userId: string, role: string, query: any) {
     const { skip, take, page, limit } = getPagination(query);
 
-    const where = role === 'client' ? { clientId: userId } : { freelancerId: userId };
+    const where: any = role === 'client' ? { clientId: userId } : { freelancerId: userId };
+    if (query.status) where.status = query.status;
 
     const [data, total] = await this.contractRepo.findAndCount({
       where,
@@ -202,10 +203,8 @@ export class ContractsService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.update(User, clientId, {
-        walletBalance: () => `wallet_balance - ${milestone.amount}`,
-        escrowBalance: () => `escrow_balance + ${milestone.amount}`,
-      });
+      await queryRunner.manager.decrement(User, { id: clientId }, 'walletBalance', Number(milestone.amount));
+      await queryRunner.manager.increment(User, { id: clientId }, 'escrowBalance', Number(milestone.amount));
 
       await queryRunner.manager.update(Milestone, milestoneId, {
         isEscrowFunded: true,

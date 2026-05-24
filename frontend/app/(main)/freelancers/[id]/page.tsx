@@ -29,14 +29,21 @@ export default function FreelancerProfilePage() {
   const user = data?.data;
 
   const { data: reviewsData } = useGetFreelancerReviewsQuery(
-    { userId: id, params: { page: reviewPage, limit: 5 } },
+    { id, params: { page: reviewPage, limit: 5 } },
     { skip: activeTab !== 'reviews' }
   );
   const { data: summaryData } = useGetRatingSummaryQuery(id);
 
-  const reviews = reviewsData?.data?.items ?? [];
-  const reviewMeta = reviewsData?.data?.meta;
-  const summary = summaryData?.data;
+  const reviews = reviewsData?.data ?? [];
+  const reviewMeta = reviewsData?.meta;
+  // Use summary from API if it has data, otherwise fall back to denormalized user fields
+  const rawSummary = summaryData?.data;
+  const summary = {
+    averageRating: rawSummary?.totalReviews > 0 ? Number(rawSummary.averageRating) : Number(user?.averageRating ?? 0),
+    totalReviews: rawSummary?.totalReviews > 0 ? rawSummary.totalReviews : (user?.totalReviews ?? 0),
+    breakdown: rawSummary?.breakdown,
+    distribution: rawSummary?.distribution,
+  };
   const profile = user?.freelancerProfile;
 
   if (isLoading) {
@@ -102,7 +109,7 @@ export default function FreelancerProfilePage() {
                   {summary?.averageRating > 0 && (
                     <span className="flex items-center gap-1">
                       <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                      <span className="font-medium text-gray-700 dark:text-gray-300">{summary.averageRating?.toFixed(1)}</span>
+                      <span className="font-medium text-gray-700 dark:text-gray-300">{Number(summary.averageRating || 0).toFixed(1)}</span>
                       <span>({summary.totalReviews} reviews)</span>
                     </span>
                   )}
@@ -173,7 +180,7 @@ export default function FreelancerProfilePage() {
                   <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Rating Breakdown</h2>
                   <div className="flex items-center gap-6">
                     <div className="text-center">
-                      <p className="text-5xl font-bold text-gray-900 dark:text-white">{summary.averageRating?.toFixed(1)}</p>
+                      <p className="text-5xl font-bold text-gray-900 dark:text-white">{Number(summary.averageRating || 0).toFixed(1)}</p>
                       <div className="flex items-center justify-center gap-0.5 mt-2">
                         {[1, 2, 3, 4, 5].map((s) => (
                           <Star key={s} className={cn('w-4 h-4', s <= Math.round(summary.averageRating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200 dark:text-gray-700')} />
@@ -301,7 +308,7 @@ export default function FreelancerProfilePage() {
             )}
             <div className="space-y-3">
               {[
-                { label: 'Jobs Completed', value: profile?._count?.contracts ?? 0, icon: CheckCircle, color: 'text-green-500' },
+                { label: 'Jobs Completed', value: user?.completedJobs ?? profile?._count?.contracts ?? 0, icon: CheckCircle, color: 'text-green-500' },
                 { label: 'Total Reviews', value: summary?.totalReviews ?? 0, icon: Star, color: 'text-yellow-500' },
                 { label: 'Member Since', value: formatDate(user.createdAt), icon: Calendar, color: 'text-blue-500' },
               ].map((item) => (

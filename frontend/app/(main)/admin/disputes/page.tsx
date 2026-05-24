@@ -24,21 +24,43 @@ import {
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
-const STATUS_TABS = ["all", "open", "under_review", "resolved", "closed"];
+const STATUS_TABS = ["all", "open", "under_review", "awaiting_response", "mediation", "escalated", "resolved_claimant", "resolved_respondent", "closed"];
 
 const STATUS_CONFIG: Record<string, { color: string; icon: any }> = {
   open: {
-    color:
-      "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
+    color: "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400",
     icon: AlertTriangle,
   },
   under_review: {
     color: "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
     icon: Shield,
   },
+  awaiting_response: {
+    color: "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
+    icon: Clock,
+  },
+  mediation: {
+    color: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
+    icon: Shield,
+  },
+  escalated: {
+    color: "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400",
+    icon: AlertTriangle,
+  },
+  resolved_claimant: {
+    color: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+    icon: CheckCircle,
+  },
+  resolved_respondent: {
+    color: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
+    icon: CheckCircle,
+  },
+  resolved_split: {
+    color: "bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400",
+    icon: CheckCircle,
+  },
   resolved: {
-    color:
-      "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
+    color: "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400",
     icon: CheckCircle,
   },
   closed: {
@@ -193,9 +215,9 @@ export default function AdminDisputesPage() {
                           </p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          {dispute.claimedAmount && (
+                          {dispute.claimAmount && (
                             <p className="text-sm font-semibold text-gray-900 dark:text-white">
-                              {formatCurrency(dispute.claimedAmount)}
+                              {formatCurrency(dispute.claimAmount)}
                             </p>
                           )}
                           <p className="text-xs text-gray-400 mt-0.5">

@@ -71,9 +71,7 @@ export class PaymentsService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.update(User, userId, {
-        walletBalance: () => `wallet_balance + ${amount}`,
-      });
+      await queryRunner.manager.increment(User, { id: userId }, 'walletBalance', amount);
 
       const payment = queryRunner.manager.create(Payment, {
         transactionId: generateTransactionId(),
@@ -114,9 +112,7 @@ export class PaymentsService {
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.update(User, userId, {
-        walletBalance: () => `wallet_balance - ${amount}`,
-      });
+      await queryRunner.manager.decrement(User, { id: userId }, 'walletBalance', amount);
 
       const payment = queryRunner.manager.create(Payment, {
         transactionId: generateTransactionId(),
@@ -163,12 +159,27 @@ export class PaymentsService {
 
   async getAdminPayments(query: any) {
     const { skip, take, page, limit } = getPagination(query);
-    const [data, total] = await this.paymentRepo.findAndCount({
-      relations: ['contract'],
-      order: { createdAt: 'DESC' },
-      skip,
-      take,
-    });
+
+    const qb = this.paymentRepo
+      .createQueryBuilder('payment')
+      .leftJoinAndSelect('payment.contract', 'contract')
+      .leftJoinAndSelect('payment.payer', 'payer')
+      .leftJoinAndSelect('payment.payee', 'payee')
+      .orderBy('payment.createdAt', 'DESC');
+
+    if (query.type) {
+      qb.andWhere('payment.type = :type', { type: query.type });
+    }
+
+    if (query.search) {
+      qb.andWhere(
+        '(payer.email ILIKE :search OR payee.email ILIKE :search OR payment.transactionId ILIKE :search)',
+        { search: `%${query.search}%` },
+      );
+    }
+
+    qb.skip(skip).take(take);
+    const [data, total] = await qb.getManyAndCount();
     return paginatedResponse(data, total, page, limit);
   }
 }

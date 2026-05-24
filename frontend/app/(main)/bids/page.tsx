@@ -25,8 +25,8 @@ export default function BidsPage() {
 
   const [withdrawBid] = useWithdrawBidMutation();
 
-  const bids = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const bids = data?.data ?? [];
+  const meta = data?.meta;
 
   const handleWithdraw = async (bidId: string) => {
     if (!confirm('Are you sure you want to withdraw this bid?')) return;

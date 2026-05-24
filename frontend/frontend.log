@@ -1,0 +1,1482 @@
+
+> nexus-frontend@1.0.0 dev
+> next dev --port 3001
+
+  ▲ Next.js 14.2.0
+  - Local:        http://localhost:3001
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 6s
+ ○ Compiling / ...
+ ✓ Compiled / in 10.7s (551 modules)
+ GET / 307 in 12460ms
+ ✓ Compiled in 1598ms (270 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 9.9s (2024 modules)
+ GET / 307 in 220ms
+ GET /dashboard 200 in 101ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1967ms (2065 modules)
+ ○ Compiling /admin/projects ...
+ ✓ Compiled /admin/projects in 906ms (2079 modules)
+ ○ Compiling /projects/[id] ...
+ ✓ Compiled /projects/[id] in 1031ms (2102 modules)
+ ○ Compiling /projects ...
+ ✓ Compiled /projects in 1126ms (2126 modules)
+ ○ Compiling /admin/disputes ...
+ ✓ Compiled /admin/disputes in 2.4s (2134 modules)
+ ○ Compiling /disputes/[id] ...
+ ✓ Compiled /disputes/[id] in 1245ms (1601 modules)
+ ○ Compiling /contracts/[id] ...
+ ✓ Compiled /contracts/[id] in 893ms (1623 modules)
+ ○ Compiling /disputes/new ...
+ ✓ Compiled /disputes/new in 811ms (1632 modules)
+ ○ Compiling /disputes ...
+ ✓ Compiled /disputes in 888ms (1622 modules)
+ ○ Compiling /payments ...
+ ✓ Compiled /payments in 893ms (1625 modules)
+ ○ Compiling /admin/payments ...
+ ✓ Compiled /admin/payments in 791ms (1630 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1379ms (1625 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1801ms
+ ○ Compiling /messages ...
+ ✓ Compiled /messages in 3.6s (1631 modules)
+ GET /payments 200 in 433ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1084ms (568 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 1740ms (1110 modules)
+ ○ Compiling /projects ...
+ ✓ Compiled /projects in 653ms (1114 modules)
+ ✓ Compiled /projects/[id] in 429ms (1128 modules)
+ ○ Compiling /projects/my ...
+ ✓ Compiled /projects/my in 1713ms (2185 modules)
+ ○ Compiling /projects/post ...
+ ✓ Compiled /projects/post in 993ms (2193 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1582ms (2172 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 2080ms
+ GET /projects/0deaa670-dc78-4f7f-bb90-639fb35d63b5/edit 404 in 67ms
+ GET /projects/0deaa670-dc78-4f7f-bb90-639fb35d63b5 200 in 280ms
+ ○ Compiling /freelancers ...
+ ✓ Compiled /freelancers in 3s (2184 modules)
+ ○ Compiling /freelancers/[id] ...
+ ✓ Compiled /freelancers/[id] in 1423ms (1651 modules)
+ ○ Compiling /agencies ...
+ ✓ Compiled /agencies in 990ms (1659 modules)
+ ○ Compiling /contracts ...
+ ✓ Compiled /contracts in 762ms (1657 modules)
+ ○ Compiling /contracts/[id] ...
+ ✓ Compiled /contracts/[id] in 707ms (584 modules)
+ ○ Compiling /messages ...
+ ✓ Compiled /messages in 520ms (584 modules)
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 872ms (1112 modules)
+ ✓ Compiled in 1486ms (2182 modules)
+ ✓ Compiled in 567ms (1091 modules)
+ ✓ Compiled in 637ms (1091 modules)
+ ✓ Compiled in 394ms (1091 modules)
+ ✓ Compiled in 476ms (1091 modules)
+ ✓ Compiled in 407ms (1091 modules)
+ ✓ Compiled in 458ms (1091 modules)
+ ✓ Compiled in 856ms (1091 modules)
+ ✓ Compiled in 487ms (1091 modules)
+ ✓ Compiled in 484ms (1091 modules)
+ ✓ Compiled in 1791ms (2198 modules)
+ ✓ Compiled in 590ms (1092 modules)
+ ✓ Compiled in 544ms (1092 modules)
+ ✓ Compiled in 436ms (1092 modules)
+ ✓ Compiled in 1850ms (2198 modules)
+ ✓ Compiled in 880ms (2198 modules)
+ ✓ Compiled in 1049ms (2198 modules)
+ ✓ Compiled in 404ms (1092 modules)
+ ✓ Compiled in 446ms (1092 modules)
+ ✓ Compiled in 389ms (1092 modules)
+ ✓ Compiled in 400ms (1092 modules)
+ ✓ Compiled in 446ms (1092 modules)
+ ✓ Compiled in 446ms (1092 modules)
+ ✓ Compiled in 438ms (1092 modules)
+ ✓ Compiled in 660ms (1092 modules)
+ ✓ Compiled in 463ms (1092 modules)
+ ✓ Compiled in 424ms (1092 modules)
+ ✓ Compiled in 577ms (1092 modules)
+ ✓ Compiled in 492ms (1092 modules)
+ ✓ Compiled in 1479ms (1092 modules)
+ ✓ Compiled in 1252ms (1092 modules)
+ ✓ Compiled in 955ms (1092 modules)
+ ✓ Compiled in 944ms (1092 modules)
+ ✓ Compiled in 782ms (1092 modules)
+ ✓ Compiled in 944ms (1092 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1348ms (1116 modules)
+ ○ Compiling /admin/disputes ...
+ ✓ Compiled /admin/disputes in 898ms (1114 modules)
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 1345ms (2207 modules)
+ ✓ Compiled in 670ms (1094 modules)
+ ○ Compiling /admin/payments ...
+ ✓ Compiled /admin/payments in 1073ms (1104 modules)
+ ○ Compiling /projects/post ...
+ ✓ Compiled /projects/post in 746ms (1105 modules)
+ ○ Compiling /projects/my ...
+ ✓ Compiled /projects/my in 1180ms (1089 modules)
+ ○ Compiling /projects/[id] ...
+ ✓ Compiled /projects/[id] in 1139ms (1093 modules)
+ ○ Compiling /projects/[id]/edit ...
+ ✓ Compiled /projects/[id]/edit in 1651ms (2192 modules)
+ ✓ Compiled in 683ms (1098 modules)
+ GET /projects/nimadir 200 in 500ms
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 1450ms (1668 modules)
+ GET /nimadir 404 in 1782ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled /dashboard in 971ms (1113 modules)
+ ○ Compiling /freelancers ...
+ ✓ Compiled /freelancers in 1026ms (1111 modules)
+ ○ Compiling /freelancers/[id] ...
+ ✓ Compiled /freelancers/[id] in 707ms (1120 modules)
+ ○ Compiling /agencies ...
+ ✓ Compiled /agencies in 1239ms (1113 modules)
+ ○ Compiling /freelancers ...
+ ✓ Compiled /freelancers in 731ms (1115 modules)
+ ○ Compiling /projects ...
+ ✓ Compiled /projects in 1047ms (1113 modules)
+ ○ Compiling /login ...
+ ✓ Compiled /login in 739ms (1116 modules)
+ ○ Compiling /projects/[id] ...
+ ✓ Compiled /projects/[id] in 714ms (1120 modules)
+ GET /projects 200 in 468ms
+ ○ Compiling /bids ...
+ ✓ Compiled /bids in 2.7s (2221 modules)
+ ✓ Compiled in 1264ms (1101 modules)
+ ✓ Compiled in 4.1s (2214 modules)
+ ✓ Compiled in 3s (2200 modules)
+ ✓ Compiled in 749ms (1101 modules)
+ ✓ Compiled in 510ms (1101 modules)
+ ✓ Compiled in 904ms (2214 modules)
+ ✓ Compiled in 1198ms (2214 modules)
+ ✓ Compiled in 453ms (1101 modules)
+ ✓ Compiled in 618ms (1101 modules)
+ ✓ Compiled in 496ms (1101 modules)
+ ✓ Compiled in 1203ms (2214 modules)
+ ✓ Compiled in 1052ms (2200 modules)
+ ✓ Compiled in 532ms (1101 modules)
+ ✓ Compiled in 721ms (1101 modules)
+ ✓ Compiled in 595ms (1101 modules)
+ ✓ Compiled in 496ms (1101 modules)
+ ✓ Compiled in 501ms (1101 modules)
+ ✓ Compiled in 485ms (1101 modules)
+ ✓ Compiled in 481ms (1101 modules)
+ GET /bids 200 in 470ms
+ ○ Compiling /contracts ...
+ ✓ Compiled /contracts in 1679ms (1118 modules)
+ ○ Compiling /contracts/[id] ...
+ ✓ Compiled /contracts/[id] in 694ms (1135 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 850ms (1128 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 1253ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 733ms (1122 modules)
+ ○ Compiling /projects/post ...
+ ✓ Compiled /projects/post in 1499ms (1127 modules)
+ ○ Compiling /_not-found ...
+ ✓ Compiled /_not-found in 517ms (1123 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 844ms
+ GET /projects/post 200 in 304ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 196ms
+ ✓ Compiled in 1785ms (2210 modules)
+ ✓ Compiled in 552ms (1101 modules)
+ ✓ Compiled in 608ms (1101 modules)
+ ✓ Compiled in 1528ms (2210 modules)
+ ⨯ ./app/layout.tsx
+Error: 
+  [31mx[0m Unexpected token `html`. Expected jsx identifier
+    ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\app\layout.tsx[0m:55:1]
+ [2m55[0m | 
+ [2m56[0m | export default function RootLayout({ children }: { children: React.ReactNode }) {
+ [2m57[0m |   return (
+ [2m58[0m |     <html lang="en" suppressHydrationWarning>
+    : [31;1m     ^^^^[0m
+ [2m59[0m |       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+ [2m60[0m |         <I18nProvider>
+ [2m60[0m |         <ReduxProvider>
+    `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./app/layout.tsx
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:215:1]
+ [2m215[0m |       titlePlaceholder: 'e.g. Build a full-stack e-commerce platform with React and Node.js',
+ [2m216[0m |       descLabel: 'Description *',
+ [2m217[0m |       descPlaceholder:
+ [2m218[0m |         'Describe your project in detail. Include the problem you're trying to solve, key features, and any technical specifications…',
+     : [31;1m                                                                  ^^[0m
+ [2m219[0m |       reqLabel: 'Requirements (optional)',
+ [2m220[0m |       reqPlaceholder:
+ [2m221[0m |         'List any specific requirements, preferred technologies, or qualifications…',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ⨯ ./lib/i18n/translations/en.ts
+Error: 
+  [31mx[0m Expected ',', got 're'
+     ,-[[36;1;4mD:\CLAUDE\nexus\.claude\worktrees\gallant-antonelli-89d2cb\frontend\lib\i18n\translations\en.ts[0m:264:1]
+ [2m264[0m |     delivery: 'Delivery Time (days) *',
+ [2m265[0m |     coverLetter: 'Cover Letter *',
+ [2m266[0m |     coverPlaceholder:
+ [2m267[0m |       'Introduce yourself, explain why you're the best fit for this project, describe your approach and relevant experience…',
+     : [31;1m                                           ^^[0m
+ [2m268[0m |     milestones: 'Milestones',
+ [2m269[0m |     milestonesSub: 'Break your work into deliverable milestones',
+ [2m270[0m |     includeMilestones: 'Include milestones',
+     `----
+
+Caused by:
+    Syntax Error
+
+Import trace for requested module:
+./lib/i18n/translations/en.ts
+./lib/i18n/index.ts
+ ✓ Compiled in 511ms (2206 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /projects/post 200 in 237ms
+ ✓ Compiled /_not-found in 441ms (1116 modules)
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 620ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ ✓ Compiled in 1265ms (2207 modules)
+ GET /projects/post 200 in 875ms
+ GET /.well-known/appspecific/com.chrome.devtools.json 404 in 53ms
+ ✓ Compiled in 1283ms (2221 modules)
+ ✓ Compiled in 945ms (2207 modules)

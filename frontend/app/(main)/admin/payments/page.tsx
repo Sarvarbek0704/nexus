@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useGetTransactionHistoryQuery } from '@/store/api/paymentsApi';
+import { useGetAllTransactionsQuery } from '@/store/api/paymentsApi';
 import { formatRelativeTime, formatCurrency } from '@/lib/utils';
 import { Pagination } from '@/components/ui/Pagination';
 import {
@@ -10,15 +10,16 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const TYPE_TABS = ['all', 'deposit', 'withdrawal', 'escrow_fund', 'escrow_release', 'refund'];
+const TYPE_TABS = ['all', 'milestone_payment', 'escrow_deposit', 'escrow_release', 'withdrawal', 'refund', 'platform_fee'];
 
 const TYPE_CONFIG: Record<string, { label: string; color: string; bg: string; icon: any; credit: boolean }> = {
-  deposit: { label: 'Deposit', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-900/30', icon: ArrowDownLeft, credit: true },
-  withdrawal: { label: 'Withdrawal', color: 'text-red-600 dark:text-red-400', bg: 'bg-red-100 dark:bg-red-900/30', icon: ArrowUpRight, credit: false },
-  escrow_fund: { label: 'Escrow Fund', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/30', icon: Shield, credit: false },
+  milestone_payment: { label: 'Milestone Payment', color: 'text-green-600 dark:text-green-400', bg: 'bg-green-100 dark:bg-green-900/30', icon: ArrowDownLeft, credit: true },
+  escrow_deposit: { label: 'Escrow Deposit', color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-100 dark:bg-blue-900/30', icon: Shield, credit: false },
   escrow_release: { label: 'Escrow Release', color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/30', icon: TrendingUp, credit: true },
+  withdrawal: { label: 'Withdrawal', color: 'text-red-600 dark:text-red-400', bg: 'bg-red-100 dark:bg-red-900/30', icon: ArrowUpRight, credit: false },
   refund: { label: 'Refund', color: 'text-yellow-600 dark:text-yellow-400', bg: 'bg-yellow-100 dark:bg-yellow-900/30', icon: TrendingDown, credit: true },
   platform_fee: { label: 'Platform Fee', color: 'text-gray-600 dark:text-gray-400', bg: 'bg-gray-100 dark:bg-gray-800', icon: DollarSign, credit: false },
+  bonus: { label: 'Bonus', color: 'text-purple-600 dark:text-purple-400', bg: 'bg-purple-100 dark:bg-purple-900/30', icon: TrendingUp, credit: true },
 };
 
 export default function AdminPaymentsPage() {
@@ -26,21 +27,20 @@ export default function AdminPaymentsPage() {
   const [type, setType] = useState('all');
   const [search, setSearch] = useState('');
 
-  const { data, isLoading } = useGetTransactionHistoryQuery({
+  const { data, isLoading } = useGetAllTransactionsQuery({
     page,
     limit: 20,
     type: type !== 'all' ? type : undefined,
     search: search || undefined,
-    admin: true,
   });
 
-  const transactions = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const transactions = data?.data ?? [];
+  const meta = data?.meta;
 
-  const totalVolume = transactions.reduce((sum: number, t: any) => sum + (t.amount ?? 0), 0);
-  const totalDeposits = transactions.filter((t: any) => t.type === 'deposit').reduce((s: number, t: any) => s + t.amount, 0);
-  const totalWithdrawals = transactions.filter((t: any) => t.type === 'withdrawal').reduce((s: number, t: any) => s + t.amount, 0);
-  const totalEscrow = transactions.filter((t: any) => t.type === 'escrow_fund').reduce((s: number, t: any) => s + t.amount, 0);
+  const totalVolume = transactions.reduce((sum: number, t: any) => sum + Number(t.amount ?? 0), 0);
+  const totalDeposits = transactions.filter((t: any) => t.type === 'milestone_payment').reduce((s: number, t: any) => s + Number(t.amount), 0);
+  const totalWithdrawals = transactions.filter((t: any) => t.type === 'withdrawal').reduce((s: number, t: any) => s + Number(t.amount), 0);
+  const totalEscrow = transactions.filter((t: any) => t.type === 'escrow_deposit').reduce((s: number, t: any) => s + Number(t.amount), 0);
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-6">
@@ -150,18 +150,18 @@ export default function AdminPaymentsPage() {
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-2">
                           <div className="w-7 h-7 rounded-full bg-nexus-100 dark:bg-nexus-900/50 flex items-center justify-center text-xs font-bold text-nexus-600 dark:text-nexus-400 flex-shrink-0">
-                            {tx.user?.firstName?.[0]}
+                            {(tx.payer ?? tx.user)?.firstName?.[0]}
                           </div>
                           <div>
                             <p className="text-sm font-medium text-gray-900 dark:text-white">
-                              {tx.user?.firstName} {tx.user?.lastName}
+                              {(tx.payer ?? tx.user)?.firstName} {(tx.payer ?? tx.user)?.lastName}
                             </p>
-                            <p className="text-xs text-gray-400">{tx.user?.email}</p>
+                            <p className="text-xs text-gray-400">{(tx.payer ?? tx.user)?.email}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-5 py-4">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">{tx.reference ?? '—'}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">{tx.transactionId ?? '—'}</p>
                       </td>
                       <td className="px-5 py-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400">{formatRelativeTime(tx.createdAt)}</p>

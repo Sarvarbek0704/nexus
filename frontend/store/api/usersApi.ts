@@ -26,7 +26,7 @@ export const usersApi = createApi({
       providesTags: ["User"],
     }),
     getUserProfile: builder.query<any, string>({
-      query: (id) => `/users/${id}/profile`,
+      query: (id) => `/users/profile/${id}`,
       providesTags: ["User"],
     }),
     updateProfile: builder.mutation<any, any>({

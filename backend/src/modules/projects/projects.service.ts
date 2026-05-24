@@ -40,21 +40,11 @@ export class ProjectsService {
       if (dto.skillIds?.length) {
         const skills = await this.skillRepo.findBy({ id: In(dto.skillIds) });
         project.skills = skills;
-        await this.skillRepo
-          .createQueryBuilder()
-          .update()
-          .set({ usageCount: () => 'usage_count + 1' })
-          .whereInIds(dto.skillIds)
-          .execute();
+        await this.skillRepo.increment({ id: In(dto.skillIds) }, 'usageCount', 1);
       }
 
       if (dto.categoryId) {
-        await this.categoryRepo
-          .createQueryBuilder()
-          .update()
-          .set({ projectCount: () => 'project_count + 1' })
-          .where('id = :id', { id: dto.categoryId })
-          .execute();
+        await this.categoryRepo.increment({ id: dto.categoryId }, 'projectCount', 1);
       }
 
       await queryRunner.manager.save(project);
@@ -127,9 +117,31 @@ export class ProjectsService {
   async findOneAndIncrementView(id: string, userId?: string) {
     const project = await this.findOne(id);
     if (userId !== project.clientId) {
-      await this.projectRepo.update(id, { viewsCount: () => 'views_count + 1' });
+      await this.projectRepo.increment({ id }, 'viewsCount', 1);
     }
     return project;
+  }
+
+  async adminFindAll(query: any) {
+    const { skip, take, page, limit } = getPagination(query);
+
+    const qb = this.projectRepo
+      .createQueryBuilder('project')
+      .leftJoinAndSelect('project.category', 'category')
+      .leftJoinAndSelect('project.client', 'client')
+      .orderBy('project.createdAt', 'DESC');
+
+    if (query.search) {
+      qb.andWhere(
+        '(project.title ILIKE :search OR project.description ILIKE :search)',
+        { search: `%${query.search}%` },
+      );
+    }
+    if (query.status) qb.andWhere('project.status = :status', { status: query.status });
+
+    qb.skip(skip).take(take);
+    const [data, total] = await qb.getManyAndCount();
+    return paginatedResponse(data, total, page, limit);
   }
 
   async update(id: string, userId: string, dto: Partial<CreateProjectDto>) {

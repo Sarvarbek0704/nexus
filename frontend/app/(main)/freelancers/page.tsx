@@ -1,6 +1,7 @@
 ﻿'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useGetFreelancersQuery } from '@/store/api/usersApi';
 import { useGetCategoriesQuery, useGetSkillsQuery } from '@/store/api/skillsApi';
 import { Pagination } from '@/components/ui/Pagination';
@@ -20,9 +21,15 @@ const EXPERIENCE_LEVELS = ['entry', 'intermediate', 'expert'];
 const AVAILABILITY = ['full_time', 'part_time', 'contract'];
 
 export default function FreelancersPage() {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') ?? '');
   const [sort, setSort] = useState('rating:DESC');
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q) setSearch(q);
+  }, [searchParams]);
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [skillSearch, setSkillSearch] = useState('');
@@ -43,8 +50,8 @@ export default function FreelancersPage() {
   const { data: categoriesData } = useGetCategoriesQuery();
   const { data: skillsData } = useGetSkillsQuery({ search: debouncedSkillSearch });
 
-  const freelancers = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const freelancers = data?.data ?? [];
+  const meta = data?.meta;
   const categories = categoriesData?.data ?? [];
   const skills = skillsData?.data ?? [];
 
@@ -58,7 +65,7 @@ export default function FreelancersPage() {
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Find Freelancers</h2>
         <p className="text-gray-500 dark:text-gray-400 mt-1">
-          {meta?.totalItems ? `${meta.totalItems.toLocaleString()} freelancers available` : 'Discover talented professionals'}
+          {meta?.total ? `${meta.total.toLocaleString()} freelancers available` : 'Discover talented professionals'}
         </p>
       </div>
 

@@ -20,7 +20,7 @@ export const reviewsApi = createApi({
       providesTags: ['Review'],
     }),
     getRatingSummary: builder.query<any, string>({
-      query: (id) => `/reviews/freelancer/${id}/summary`,
+      query: (id) => `/reviews/summary/${id}`,
       providesTags: ['Review'],
     }),
     createReview: builder.mutation<any, any>({

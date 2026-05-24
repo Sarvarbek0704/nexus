@@ -92,7 +92,7 @@ export class DisputesService {
   async findOne(id: string) {
     const dispute = await this.disputeRepo.findOne({
       where: { id },
-      relations: ['contract', 'contract.project', 'claimant', 'respondent', 'mediator', 'messages', 'milestone'],
+      relations: ['contract', 'contract.project', 'claimant', 'respondent', 'mediator', 'messages', 'messages.sender', 'milestone'],
     });
     if (!dispute) throw new NotFoundException('Dispute not found');
     return dispute;
@@ -215,24 +215,45 @@ export class DisputesService {
 
   async getMyDisputes(userId: string, query: any) {
     const { skip, take, page, limit } = getPagination(query);
-    const [data, total] = await this.disputeRepo.findAndCount({
-      where: [{ claimantId: userId }, { respondentId: userId }],
-      relations: ['contract', 'contract.project'],
-      order: { createdAt: 'DESC' },
-      skip,
-      take,
-    });
+
+    const qb = this.disputeRepo
+      .createQueryBuilder('dispute')
+      .leftJoinAndSelect('dispute.contract', 'contract')
+      .leftJoinAndSelect('contract.project', 'project')
+      .loadRelationCountAndMap('dispute.messagesCount', 'dispute.messages')
+      .where('(dispute.claimantId = :userId OR dispute.respondentId = :userId)', { userId })
+      .orderBy('dispute.createdAt', 'DESC');
+
+    if (query.status) qb.andWhere('dispute.status = :status', { status: query.status });
+
+    qb.skip(skip).take(take);
+    const [data, total] = await qb.getManyAndCount();
     return paginatedResponse(data, total, page, limit);
   }
 
   async getAllDisputes(query: any) {
     const { skip, take, page, limit } = getPagination(query);
-    const [data, total] = await this.disputeRepo.findAndCount({
-      relations: ['contract', 'claimant', 'respondent'],
-      order: { createdAt: 'DESC' },
-      skip,
-      take,
-    });
+
+    const qb = this.disputeRepo
+      .createQueryBuilder('dispute')
+      .leftJoinAndSelect('dispute.contract', 'contract')
+      .leftJoinAndSelect('dispute.claimant', 'claimant')
+      .leftJoinAndSelect('dispute.respondent', 'respondent')
+      .orderBy('dispute.createdAt', 'DESC');
+
+    if (query.status) {
+      qb.andWhere('dispute.status = :status', { status: query.status });
+    }
+
+    if (query.search) {
+      qb.andWhere(
+        '(dispute.title ILIKE :search OR dispute.description ILIKE :search OR dispute.disputeNumber ILIKE :search)',
+        { search: `%${query.search}%` },
+      );
+    }
+
+    qb.skip(skip).take(take);
+    const [data, total] = await qb.getManyAndCount();
     return paginatedResponse(data, total, page, limit);
   }
 }

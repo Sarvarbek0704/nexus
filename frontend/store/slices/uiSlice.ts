@@ -7,7 +7,7 @@ interface UiState {
 }
 
 const initialState: UiState = {
-  sidebarOpen: true,
+  sidebarOpen: false,
   notificationPanelOpen: false,
   unreadNotifications: 0,
 };

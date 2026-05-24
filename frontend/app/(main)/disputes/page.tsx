@@ -8,7 +8,7 @@ import { ShieldAlert, ArrowRight, Plus, Loader2, MessageSquare, Clock } from 'lu
 import { Pagination } from '@/components/ui/Pagination';
 import { cn } from '@/lib/utils';
 
-const STATUS_TABS = ['all', 'open', 'under_review', 'awaiting_response', 'mediation', 'resolved', 'closed'];
+const STATUS_TABS = ['all', 'open', 'under_review', 'awaiting_response', 'mediation', 'escalated', 'resolved_claimant', 'resolved_respondent', 'closed'];
 
 export default function DisputesPage() {
   const [page, setPage] = useState(1);
@@ -20,8 +20,8 @@ export default function DisputesPage() {
     status: activeStatus === 'all' ? undefined : activeStatus,
   });
 
-  const disputes = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const disputes = data?.data ?? [];
+  const meta = data?.meta;
 
   return (
     <div className="p-6 space-y-5">
@@ -90,14 +90,14 @@ export default function DisputesPage() {
                         <Clock className="w-3 h-3" /> {formatRelativeTime(dispute.createdAt)}
                       </span>
                       <span className="flex items-center gap-1">
-                        <MessageSquare className="w-3 h-3" /> {dispute._count?.messages ?? 0} messages
+                        <MessageSquare className="w-3 h-3" /> {(dispute as any).messagesCount ?? dispute._count?.messages ?? 0} messages
                       </span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  {dispute.claimedAmount && (
-                    <p className="font-bold text-gray-900 dark:text-white">{formatCurrency(dispute.claimedAmount)}</p>
+                  {dispute.claimAmount && (
+                    <p className="font-bold text-gray-900 dark:text-white">{formatCurrency(dispute.claimAmount)}</p>
                   )}
                   <span className="text-nexus-600 dark:text-nexus-400 text-xs flex items-center gap-1 mt-1">
                     View <ArrowRight className="w-3 h-3" />

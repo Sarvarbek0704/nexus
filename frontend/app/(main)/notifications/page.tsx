@@ -41,9 +41,9 @@ export default function NotificationsPage() {
   const [markAllRead] = useMarkAllAsReadMutation();
   const [markRead] = useMarkAsReadMutation();
 
-  const notifications = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
-  const unreadCount = notifications.filter((n) => !n.isRead).length;
+  const notifications = data?.data ?? [];
+  const meta = data?.meta;
+  const unreadCount = notifications.filter((n: any) => !n.isRead).length;
 
   return (
     <div className="p-6 space-y-5 max-w-3xl mx-auto">
@@ -125,7 +125,7 @@ export default function NotificationsPage() {
         </div>
       )}
 
-      {meta && meta.totalPages > 1 && (
+      {meta && (meta.totalPages ?? 1) > 1 && (
         <Pagination currentPage={page} totalPages={meta.totalPages} onPageChange={setPage} />
       )}
     </div>

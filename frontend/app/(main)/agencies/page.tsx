@@ -39,8 +39,8 @@ export default function AgenciesPage() {
     sortOrder,
   });
 
-  const agencies = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const agencies = data?.data ?? [];
+  const meta = data?.meta;
 
   const activeFilters = [
     ...(size !== 'any' ? [{ key: 'size', label: `Size: ${size}` }] : []),

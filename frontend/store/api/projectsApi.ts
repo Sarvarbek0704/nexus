@@ -27,6 +27,10 @@ export const projectsApi = createApi({
       query: (params) => ({ url: '/projects/my', params }),
       providesTags: ['Project'],
     }),
+    getAdminProjects: builder.query<any, any>({
+      query: (params) => ({ url: '/projects/admin/all', params }),
+      providesTags: ['Project'],
+    }),
     createProject: builder.mutation<any, any>({
       query: (body) => ({ url: '/projects', method: 'POST', body }),
       invalidatesTags: ['Project'],
@@ -50,6 +54,7 @@ export const {
   useGetProjectsQuery,
   useGetProjectQuery,
   useGetMyProjectsQuery,
+  useGetAdminProjectsQuery,
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,

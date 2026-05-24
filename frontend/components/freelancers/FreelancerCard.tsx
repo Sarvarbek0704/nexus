@@ -3,6 +3,7 @@ import { User } from '@/types';
 import { formatCurrency } from '@/lib/utils';
 import { Star, MapPin, Briefcase, CheckCircle, Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 interface FreelancerCardProps {
   freelancer: User;
@@ -10,6 +11,7 @@ interface FreelancerCardProps {
 
 export function FreelancerCard({ freelancer }: FreelancerCardProps) {
   const profile = freelancer.freelancerProfile;
+  const t = useT();
 
   return (
     <Link
@@ -48,7 +50,7 @@ export function FreelancerCard({ freelancer }: FreelancerCardProps) {
           <div className="flex items-center gap-1 mt-1">
             <Star className="w-3.5 h-3.5 text-yellow-500 fill-current" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-              {freelancer.averageRating?.toFixed(1) ?? '0.0'}
+              {Number(freelancer.averageRating || 0).toFixed(1)}
             </span>
             <span className="text-xs text-gray-400">({freelancer._count?.reviews ?? 0})</span>
           </div>
@@ -58,7 +60,7 @@ export function FreelancerCard({ freelancer }: FreelancerCardProps) {
           {profile?.hourlyRate && (
             <>
               <p className="font-bold text-gray-900 dark:text-white">${profile.hourlyRate}</p>
-              <p className="text-xs text-gray-400">/hour</p>
+              <p className="text-xs text-gray-400">{t.freelancers.perHour}</p>
             </>
           )}
         </div>
@@ -96,7 +98,7 @@ export function FreelancerCard({ freelancer }: FreelancerCardProps) {
             </span>
           )}
           <span className="flex items-center gap-1">
-            <Briefcase className="w-3 h-3" /> {profile?.completedJobs ?? 0} jobs
+            <Briefcase className="w-3 h-3" /> {profile?.completedJobs ?? 0} {t.dashboard.completedJobs.toLowerCase()}
           </span>
         </div>
         <span className={cn(

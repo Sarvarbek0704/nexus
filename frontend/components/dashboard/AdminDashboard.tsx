@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Activity,
   AlertTriangle,
+  Loader2,
 } from "lucide-react";
 import {
   AreaChart,
@@ -41,7 +42,8 @@ export function AdminDashboard() {
 
   if (isLoading) {
     return (
-      <div className="p-6 text-sm text-gray-500 dark:text-gray-400">
+      <div className="p-6 flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+        <Loader2 className="w-5 h-5 animate-spin text-nexus-500" />
         Loading platform statistics...
       </div>
     );

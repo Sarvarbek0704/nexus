@@ -22,8 +22,8 @@ export default function ContractsPage() {
     status: activeStatus === 'all' ? undefined : activeStatus,
   });
 
-  const contracts = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const contracts = data?.data ?? [];
+  const meta = data?.meta;
 
   const isClient = user?.role === 'client';
 

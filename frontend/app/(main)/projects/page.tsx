@@ -1,6 +1,7 @@
 ﻿'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useGetProjectsQuery } from '@/store/api/projectsApi';
 import { useGetCategoriesQuery } from '@/store/api/skillsApi';
 import { ProjectCard } from '@/components/projects/ProjectCard';
@@ -19,8 +20,14 @@ const SORT_OPTIONS = [
 ];
 
 export default function ProjectsPage() {
+  const searchParams = useSearchParams();
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(searchParams.get('search') ?? '');
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q) setSearch(q);
+  }, [searchParams]);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sort, setSort] = useState('createdAt:DESC');
@@ -39,8 +46,8 @@ export default function ProjectsPage() {
     ...filters,
   });
 
-  const projects = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const projects = data?.data ?? [];
+  const meta = data?.meta;
 
   const handleFilterChange = useCallback((newFilters: Record<string, string>) => {
     setFilters(newFilters);
@@ -64,7 +71,7 @@ export default function ProjectsPage() {
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Browse Projects</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            {meta?.totalItems ? `${meta.totalItems.toLocaleString()} projects available` : 'Find your next opportunity'}
+            {meta?.total ? `${meta.total.toLocaleString()} projects available` : 'Find your next opportunity'}
           </p>
         </div>
 

@@ -28,7 +28,7 @@ const ROLE_COLORS: Record<string, string> = {
     "bg-purple-100 text-purple-700 dark:bg-purple-950/30 dark:text-purple-400",
 };
 
-const STATUS_TABS = ["all", "active", "suspended", "banned"];
+const STATUS_TABS = ["all", "active", "inactive", "suspended", "pending_verification"];
 
 export default function AdminUsersPage() {
   const [page, setPage] = useState(1);

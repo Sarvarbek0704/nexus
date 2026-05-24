@@ -2,7 +2,7 @@ import {
   Injectable, NotFoundException, ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Message, MessageType } from '../../database/entities/message.entity';
 import { Conversation, ConversationType } from '../../database/entities/conversation.entity';
 import { User } from '../../database/entities/user.entity';
@@ -46,15 +46,27 @@ export class MessagesService {
   async getMyConversations(userId: string, query: any) {
     const { skip, take, page, limit } = getPagination(query);
 
-    const [convs, total] = await this.convRepo
+    // Step 1: get IDs of conversations the user participates in
+    const participatingIds = await this.convRepo
       .createQueryBuilder('conv')
-      .innerJoin('conv.participants', 'p', 'p.id = :userId', { userId })
-      .leftJoinAndSelect('conv.participants', 'participants')
-      .leftJoinAndSelect('conv.project', 'project')
-      .orderBy('conv.lastMessageAt', 'DESC', 'NULLS LAST')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .select('conv.id', 'id')
+      .innerJoin('conv.participants', 'p')
+      .where('p.id = :userId', { userId })
+      .getRawMany()
+      .then((rows) => rows.map((r) => r.id));
+
+    if (participatingIds.length === 0) {
+      return paginatedResponse([], 0, page, limit);
+    }
+
+    // Step 2: load those conversations with all participants
+    const [convs, total] = await this.convRepo.findAndCount({
+      where: { id: In(participatingIds) },
+      relations: ['participants', 'project'],
+      order: { lastMessageAt: 'DESC' },
+      skip,
+      take,
+    });
 
     // Count unread messages per conversation
     const unreadCounts = await this.messageRepo
