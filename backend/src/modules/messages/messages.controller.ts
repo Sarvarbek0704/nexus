@@ -51,6 +51,16 @@ export class MessagesController {
     return this.messagesService.sendMessage(id, user.id, dto);
   }
 
+  @Patch('conversations/:id/read')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Mark all messages in conversation as read' })
+  markConversationRead(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.messagesService.markConversationRead(id, user.id);
+  }
+
   @Patch(':id')
   @ApiOperation({ summary: 'Edit a message' })
   editMessage(

@@ -37,8 +37,8 @@ import { InvoiceItem } from './entities/invoice-item.entity';
 import { Notification, NotificationType } from './entities/notification.entity';
 import { Portfolio } from './entities/portfolio.entity';
 import { TimeLog } from './entities/time-log.entity';
-import { Message } from './entities/message.entity';
-import { Conversation } from './entities/conversation.entity';
+import { Message, MessageStatus, MessageType } from './entities/message.entity';
+import { Conversation, ConversationType } from './entities/conversation.entity';
 import { BidMilestone } from './entities/bid-milestone.entity';
 
 // ── DataSource ────────────────────────────────────────────────────────────────
@@ -920,6 +920,146 @@ async function main() {
   ]);
 
   console.log(`✓ ${await notifRepo.count()} notifications`);
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // 17. CONVERSATIONS & MESSAGES
+  // ══════════════════════════════════════════════════════════════════════════
+  const convRepo = AppDataSource.getRepository(Conversation);
+  const msgRepo  = AppDataSource.getRepository(Message);
+
+  const makeConv = async (participants: User[], lastMsg: string, projectId?: string) => {
+    const conv = await convRepo.save(convRepo.create({
+      type: projectId ? ConversationType.PROJECT : ConversationType.DIRECT,
+      participants,
+      projectId: projectId ?? null,
+      lastMessage: lastMsg,
+      lastMessageAt: daysAgo(Math.floor(Math.random() * 5)),
+    }));
+    return conv;
+  };
+
+  const addMsg = (convId: string, senderId: string, content: string, daysBack: number) =>
+    msgRepo.create({ conversationId: convId, senderId, content, status: MessageStatus.READ, type: MessageType.TEXT, createdAt: daysAgo(daysBack) } as any);
+
+  // conv1: Alice (cl1) ↔ Frank (fr1) — Next.js blog project
+  const conv1 = await makeConv([cl1, fr1], 'Delivered 3 days early — thanks for the bonus!', p_done1.id);
+  await msgRepo.save([
+    addMsg(conv1.id, cl1.id, "Hi Frank! I reviewed your portfolio and I'm impressed. Can we discuss the Next.js blog project?", 20),
+    addMsg(conv1.id, fr1.id, "Thanks Alice! I'd love to work on it. I've built 3 similar platforms. Want to jump on a call?", 20),
+    addMsg(conv1.id, cl1.id, "Sure! Let's do Friday 2pm. I'll send a contract through Nexus.", 19),
+    addMsg(conv1.id, fr1.id, "Contract signed! I'll start with the architecture doc today.", 18),
+    addMsg(conv1.id, cl1.id, "Great. Keep me posted with weekly updates.", 18),
+    addMsg(conv1.id, fr1.id, "Week 1 done — Sanity CMS integrated, blog listing page ready. Sending milestone 1 soon.", 12),
+    addMsg(conv1.id, cl1.id, "Looks fantastic! Approved. Please send milestone 2 when ready.", 11),
+    addMsg(conv1.id, fr1.id, "All done and deployed! Check https://blog.alice-demo.com", 7),
+    addMsg(conv1.id, cl1.id, "Absolutely love it! Sending the final payment + a little bonus 🎉", 6),
+    addMsg(conv1.id, fr1.id, "Delivered 3 days early — thanks for the bonus!", 6),
+  ]);
+
+  // conv2: Bob (cl2) ↔ Henry (fr3) — Mobile banking
+  const conv2 = await makeConv([cl2, fr3], 'Phase 2 milestone submitted. Please review when ready.', p_prog2.id);
+  await msgRepo.save([
+    addMsg(conv2.id, cl2.id, "Henry, can you take on Phase 2 of our mobile banking app? Investment portfolio + crypto wallet.", 52),
+    addMsg(conv2.id, fr3.id, "Absolutely. I've built similar features for two fintech clients. Let me review the existing codebase.", 51),
+    addMsg(conv2.id, cl2.id, "Access granted. What's your timeline estimate?", 50),
+    addMsg(conv2.id, fr3.id, "Architecture & Auth: 2 weeks. Core features: 3 weeks. Crypto wallet: 3 weeks. P2P: 2 weeks. Total ~10 weeks.", 50),
+    addMsg(conv2.id, cl2.id, "That works. Contract incoming.", 49),
+    addMsg(conv2.id, fr3.id, "Contract signed! Starting with architecture review today.", 48),
+    addMsg(conv2.id, fr3.id, "Milestone 1 complete — auth and architecture locked in. Submitting now.", 32),
+    addMsg(conv2.id, cl2.id, "Approved! Great work on the JWT refresh flow.", 31),
+    addMsg(conv2.id, fr3.id, "Core banking features done — transfers, history, statements. Submitting milestone 2.", 10),
+    addMsg(conv2.id, cl2.id, "Reviewing now. One question: does the transaction history support CSV export?", 9),
+    addMsg(conv2.id, fr3.id, "Yes, CSV and PDF export both included. I added it as a bonus.", 9),
+    addMsg(conv2.id, cl2.id, "Excellent! Approved.", 8),
+    addMsg(conv2.id, fr3.id, "Phase 2 milestone submitted. Please review when ready.", 1),
+  ]);
+
+  // conv3: Bob (cl2) ↔ Kate (fr6) — DevOps infra
+  const conv3 = await makeConv([cl2, fr6], "Monitoring dashboard is live. Grafana + PagerDuty integrated.", p_prog4.id);
+  await msgRepo.save([
+    addMsg(conv3.id, cl2.id, "Kate, we need multi-region AWS setup with full IaC. Are you available?", 47),
+    addMsg(conv3.id, fr6.id, "Yes! I've done exactly this 6 times. EKS, RDS Aurora, Route53 failover — I know it well.", 47),
+    addMsg(conv3.id, cl2.id, "Perfect. I'm sending a contract for $21,000 total.", 46),
+    addMsg(conv3.id, fr6.id, "Signed. Starting with VPC design and Terraform module structure.", 45),
+    addMsg(conv3.id, fr6.id, "VPC + networking done. 3 AZs, private/public subnets, NAT gateways. Milestone 1 submitted.", 37),
+    addMsg(conv3.id, cl2.id, "Approved! The Terraform plan looks clean.", 36),
+    addMsg(conv3.id, fr6.id, "EKS cluster with managed node groups + cluster autoscaler ready. Milestone 2 submitted.", 22),
+    addMsg(conv3.id, cl2.id, "Approved. Looking forward to the Aurora setup.", 21),
+    addMsg(conv3.id, fr6.id, "Monitoring dashboard is live. Grafana + PagerDuty integrated.", 3),
+  ]);
+
+  // conv4: Eve (cl5) ↔ James (fr5) — ML recommendation engine
+  const conv4 = await makeConv([cl5, fr5], "AUC is 0.974 on holdout set. Report attached to milestone submission.", p_prog3.id);
+  await msgRepo.save([
+    addMsg(conv4.id, cl5.id, "James, we need a recommendation engine for our e-commerce platform. 2M+ SKUs.", 34),
+    addMsg(conv4.id, fr5.id, "Great project. I'll use a hybrid approach — collaborative filtering + content-based. Python FastAPI for the serving layer.", 33),
+    addMsg(conv4.id, cl5.id, "Love the plan. What data do you need from us?", 33),
+    addMsg(conv4.id, fr5.id, "Transaction history (last 3 years), product metadata, user profiles, and clickstream data.", 32),
+    addMsg(conv4.id, cl5.id, "Data access granted. Contract signed!", 31),
+    addMsg(conv4.id, fr5.id, "Data pipeline complete. ETL runs every 4 hours. Milestone 1 submitted.", 18),
+    addMsg(conv4.id, cl5.id, "Approved! Faster than expected.", 17),
+    addMsg(conv4.id, fr5.id, "AUC is 0.974 on holdout set. Report attached to milestone submission.", 1),
+  ]);
+
+  // conv5: Carol (cl3) ↔ Grace (fr2) — Design system dispute
+  const conv5 = await makeConv([cl3, fr2], "I understand. Let me resend the revised mockups today.", p_rev2.id);
+  await msgRepo.save([
+    addMsg(conv5.id, cl3.id, "Grace, we need 5 A/B landing page variants. Figma + HTML/CSS handoff.", 20),
+    addMsg(conv5.id, fr2.id, "Happy to take it on! I specialize in conversion-optimized landing pages.", 19),
+    addMsg(conv5.id, cl3.id, "Your bid was shortlisted. Can you start next week?", 18),
+    addMsg(conv5.id, fr2.id, "Yes, Monday works. I'll send the first wireframes by Wednesday.", 17),
+    addMsg(conv5.id, fr2.id, "Wireframes ready for review. Focused on above-the-fold CTA and social proof placement.", 12),
+    addMsg(conv5.id, cl3.id, "These look great! One change — can we make the CTA button more prominent on variant 3?", 11),
+    addMsg(conv5.id, fr2.id, "I understand. Let me resend the revised mockups today.", 11),
+  ]);
+
+  // conv6: Demo client ↔ Frank (fr1) — general inquiry
+  const conv6 = await makeConv([demoClient, fr1], "Feel free to explore the platform! I'm a demo user too.");
+  await msgRepo.save([
+    addMsg(conv6.id, demoClient.id, "Hi Frank! I'm exploring the platform. Your profile is impressive.", 3),
+    addMsg(conv6.id, fr1.id, "Thanks! Happy to chat. What kind of project are you working on?", 3),
+    addMsg(conv6.id, demoClient.id, "Looking for a full-stack developer for a SaaS dashboard. React + Node.js.", 2),
+    addMsg(conv6.id, fr1.id, "That's exactly my specialty. Check out my portfolio — I've built several SaaS dashboards.", 2),
+    addMsg(conv6.id, demoClient.id, "Impressive work! I'll post a project and invite you to bid.", 1),
+    addMsg(conv6.id, fr1.id, "Feel free to explore the platform! I'm a demo user too.", 0),
+  ]);
+
+  // conv7: David (cl4) ↔ Liam (fr7) — disputed project
+  const conv7 = await makeConv([cl4, fr7], "I've raised a dispute. Please check the disputes section.", p_prog2.id);
+  await msgRepo.save([
+    addMsg(conv7.id, cl4.id, "Liam, the frontend has critical bugs. The mobile layout is broken and 3 features are missing.", 15),
+    addMsg(conv7.id, fr7.id, "I acknowledge the mobile layout issue — it was caused by a CSS framework update. I can fix it in 48 hours.", 14),
+    addMsg(conv7.id, cl4.id, "What about the missing features? They were in the original spec.", 14),
+    addMsg(conv7.id, fr7.id, "I'll need to review the spec again. Can you share the specific line items?", 13),
+    addMsg(conv7.id, cl4.id, "I sent the spec 3 times already. I've raised a dispute. Please check the disputes section.", 12),
+  ]);
+
+  // conv8: Noah (ao1, TechForge) ↔ Alice (cl1)
+  const conv8 = await makeConv([ao1, cl1], "TechForge can deliver this. We have 5 engineers ready.");
+  await msgRepo.save([
+    addMsg(conv8.id, cl1.id, "Hi Noah! I saw TechForge's bid on our SaaS dashboard project. Impressive agency!", 6),
+    addMsg(conv8.id, ao1.id, "Thanks Alice! We've built 20+ SaaS dashboards. Our team includes senior React and DevOps engineers.", 6),
+    addMsg(conv8.id, cl1.id, "What's your process for milestone delivery and communication?", 5),
+    addMsg(conv8.id, ao1.id, "Weekly Loom video updates, daily Slack standups, and a shared project board. Full transparency.", 5),
+    addMsg(conv8.id, cl1.id, "That sounds solid. What's your timeline for a 4-milestone project?", 4),
+    addMsg(conv8.id, ao1.id, "TechForge can deliver this. We have 5 engineers ready.", 4),
+  ]);
+
+  // Update lastMessage on all conversations after saving messages
+  for (const [conv, msgs] of [
+    [conv1, "Delivered 3 days early — thanks for the bonus!"],
+    [conv2, "Phase 2 milestone submitted. Please review when ready."],
+    [conv3, "Monitoring dashboard is live. Grafana + PagerDuty integrated."],
+    [conv4, "AUC is 0.974 on holdout set. Report attached to milestone submission."],
+    [conv5, "I understand. Let me resend the revised mockups today."],
+    [conv6, "Feel free to explore the platform! I'm a demo user too."],
+    [conv7, "I've raised a dispute. Please check the disputes section."],
+    [conv8, "TechForge can deliver this. We have 5 engineers ready."],
+  ] as [Conversation, string][]) {
+    await convRepo.update(conv.id, { lastMessage: msgs });
+  }
+
+  console.log(`✓ ${await convRepo.count()} conversations, ${await msgRepo.count()} messages`);
 
   // ══════════════════════════════════════════════════════════════════════════
   // SUMMARY

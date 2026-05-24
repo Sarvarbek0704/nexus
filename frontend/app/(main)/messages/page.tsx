@@ -35,7 +35,7 @@ export default function MessagesPage() {
   const [markRead] = useMarkConversationReadMutation();
 
   const conversations = conversationsData?.data ?? [];
-  const messages = messagesData?.data?.items ?? [];
+  const messages = messagesData?.data ?? [];
 
   const filteredConversations = conversations.filter((c: any) =>
     conversationSearch
