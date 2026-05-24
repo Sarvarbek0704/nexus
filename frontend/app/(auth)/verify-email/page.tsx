@@ -128,7 +128,7 @@ export default function VerifyEmailPage() {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
-      dispatch(setCredentials({ user, accessToken }));
+      dispatch(setCredentials({ user, accessToken, refreshToken }));
 
       setVerified(true);
       toast.success('Email verified! Welcome to Nexus 🎉');

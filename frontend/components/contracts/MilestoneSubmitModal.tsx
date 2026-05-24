@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
 const schema = z.object({
-  submissionNote: z.string().min(20, 'Please provide at least 20 characters describing your work'),
+  description: z.string().min(20, 'Please provide at least 20 characters describing your work'),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -54,16 +54,16 @@ export function MilestoneSubmitModal({ milestoneId, onClose, onSuccess }: Props)
               Submission Notes *
             </label>
             <textarea
-              {...register('submissionNote')}
+              {...register('description')}
               rows={5}
               placeholder="Describe what you've completed, any decisions made, how to test/review the work, and links to deliverables..."
               className={cn(
                 'w-full px-4 py-3 text-sm border rounded-lg focus:outline-none focus:border-nexus-500 focus:ring-1 focus:ring-nexus-500 bg-white dark:bg-gray-800 dark:border-gray-700 resize-none',
-                errors.submissionNote && 'border-red-400'
+                errors.description && 'border-red-400'
               )}
             />
-            {errors.submissionNote && (
-              <p className="text-xs text-red-500 mt-1">{errors.submissionNote.message}</p>
+            {errors.description && (
+              <p className="text-xs text-red-500 mt-1">{errors.description.message}</p>
             )}
           </div>
 

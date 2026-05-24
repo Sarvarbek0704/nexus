@@ -221,7 +221,7 @@ export class BidsService {
         { status: BidStatus.REJECTED, rejectionReason: 'Another bid was accepted', rejectedAt: new Date() },
       );
 
-      const contractType = bid.milestones?.length > 0 ? ContractType.FIXED : ContractType.FIXED;
+      const contractType = bid.milestones?.length > 0 ? ContractType.FIXED : ContractType.HOURLY;
       const contract = queryRunner.manager.create(Contract, {
         contractNumber: generateContractNumber(),
         projectId: project.id,

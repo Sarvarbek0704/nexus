@@ -188,11 +188,6 @@ export class MilestonesService {
         escrowBalance: () => `escrow_balance - ${escrowAmount}`,
       });
 
-      // Release freelancer's escrow (they don't get paid)
-      await queryRunner.manager.update(User, contract.freelancerId, {
-        escrowBalance: () => `escrow_balance - ${escrowAmount}`,
-      });
-
       await queryRunner.manager.update(Contract, contract.id, {
         escrowAmount: () => `escrow_amount - ${escrowAmount}`,
       });
@@ -273,7 +268,6 @@ export class MilestonesService {
 
       await queryRunner.manager.update(User, contract.freelancerId, {
         walletBalance: () => `wallet_balance + ${netAmount}`,
-        escrowBalance: () => `escrow_balance - ${milestone.amount}`,
       });
 
       await queryRunner.manager.update(User, clientId, {

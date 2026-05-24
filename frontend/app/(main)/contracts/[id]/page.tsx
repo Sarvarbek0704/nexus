@@ -34,7 +34,7 @@ export default function ContractDetailPage() {
   const [signContract, { isLoading: signing }] = useSignContractMutation();
   const [fundEscrow, { isLoading: funding }] = useFundEscrowMutation();
   const [updateContractStatus] = useUpdateContractStatusMutation();
-  const [fundMilestone] = useFundMilestoneEscrowMutation();
+  const [fundMilestone, { isLoading: fundingMilestone }] = useFundMilestoneEscrowMutation();
 
   const contract = data?.data;
   const milestones = milestonesData?.data ?? [];
@@ -79,9 +79,9 @@ export default function ContractDetailPage() {
     }
   };
 
-  const handleFundMilestone = async (milestoneId: string, amount: number) => {
+  const handleFundMilestone = async (milestoneId: string) => {
     try {
-      await fundMilestone({ milestoneId, amount }).unwrap();
+      await fundMilestone({ contractId: id, milestoneId }).unwrap();
       toast.success('Milestone escrow funded!');
       refetchMilestones();
     } catch (err: any) {
@@ -191,7 +191,7 @@ export default function ContractDetailPage() {
             <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
               <h2 className="font-semibold text-gray-900 dark:text-white">Milestones</h2>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {milestones.filter((m) => m.status === 'approved').length}/{milestones.length} completed
+                {milestones.filter((m) => m.status === 'paid').length}/{milestones.length} completed
               </span>
             </div>
 
@@ -204,11 +204,12 @@ export default function ContractDetailPage() {
                   <div className="flex items-start gap-4">
                     <div className={cn(
                       'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0',
-                      milestone.status === 'approved' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                      milestone.status === 'in_review' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+                      milestone.status === 'paid' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' :
+                      milestone.status === 'submitted' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400' :
+                      milestone.status === 'in_progress' ? 'bg-nexus-100 text-nexus-600 dark:bg-nexus-900/30 dark:text-nexus-400' :
                       'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
                     )}>
-                      {milestone.status === 'approved' ? <CheckCircle className="w-4 h-4" /> : idx + 1}
+                      {milestone.status === 'paid' ? <CheckCircle className="w-4 h-4" /> : idx + 1}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -229,7 +230,7 @@ export default function ContractDetailPage() {
 
                       <div className="flex items-center gap-3 mt-3">
                         {/* Freelancer actions */}
-                        {isFreelancer && milestone.status === 'funded' && (
+                        {isFreelancer && (milestone.status === 'in_progress' || milestone.status === 'revision_requested') && (
                           <button
                             onClick={() => setSubmittingMilestoneId(milestone.id)}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg text-xs font-medium transition-colors"
@@ -246,13 +247,14 @@ export default function ContractDetailPage() {
                         {/* Client actions */}
                         {isClient && milestone.status === 'pending' && !milestone.isEscrowFunded && (
                           <button
-                            onClick={() => handleFundMilestone(milestone.id, milestone.amount)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition-colors"
+                            onClick={() => handleFundMilestone(milestone.id)}
+                            disabled={fundingMilestone}
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                           >
                             <Lock className="w-3.5 h-3.5" /> Fund Escrow
                           </button>
                         )}
-                        {isClient && milestone.status === 'in_review' && (
+                        {isClient && milestone.status === 'submitted' && (
                           <button
                             onClick={() => setReviewingMilestoneId(milestone.id)}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg text-xs font-medium transition-colors"

@@ -321,6 +321,18 @@ UPLOAD_DEST=./uploads
 # Rate Limiting
 THROTTLE_TTL=60           # seconds
 THROTTLE_LIMIT=100        # requests per TTL
+
+# Email / SMTP (required for OTP verification and password reset)
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_SECURE=false         # true for port 465
+MAIL_USER=your@gmail.com
+MAIL_PASS=your-app-password
+MAIL_FROM_NAME=Nexus
+MAIL_FROM_EMAIL=noreply@nexus.com
+
+# Platform Fee (percentage deducted from freelancer payouts)
+PLATFORM_FEE_PERCENT=10
 ```
 
 ### Frontend — `.env.local`
@@ -496,19 +508,20 @@ PATCH  /contracts/:id/status            Update status (pause/resume/complete/can
 
 **Milestone Escrow Flow:**
 ```
-POST   /milestones/:milestoneId/fund-escrow    Client funds escrow for a milestone
-POST   /milestones/:milestoneId/submit         Freelancer submits completed work
-PATCH  /milestones/:milestoneId/review         Client reviews work (approve/reject/revision)
+POST   /contracts/:contractId/milestones/:milestoneId/fund-escrow    Client funds escrow for a milestone
+POST   /milestones/:id/submit                  Freelancer submits completed work
+PATCH  /milestones/:id/review                  Client reviews work (approve/reject/request_revision)
 GET    /milestones/contract/:contractId        Get all milestones for a contract
 ```
 
 **Milestone States:**
 ```
-pending → funded (client funds escrow)
-funded  → in_review (freelancer submits work)
-in_review → approved (client approves → payment released automatically)
-in_review → revision_requested (client requests changes)
-in_review → rejected (client rejects)
+pending     → in_progress       (client funds escrow)
+in_progress → submitted         (freelancer submits work)
+submitted   → paid              (client approves → payment released to freelancer)
+submitted   → revision_requested (client requests changes → freelancer resubmits)
+submitted   → rejected          (client rejects → escrow refunded to client)
+revision_requested → submitted  (freelancer resubmits after revision)
 ```
 
 ---
@@ -671,7 +684,9 @@ GET    /stats/platform         [Admin] Get platform-wide stats
 |---|---|
 | `/login` | Email/password login + Google/GitHub OAuth buttons |
 | `/register` | Registration with role selection |
-| `/forgot-password` | Password reset request |
+| `/verify-email` | 6-digit OTP verification after registration |
+| `/forgot-password` | Password reset request — sends email with reset link |
+| `/reset-password` | Set new password using token from email |
 | `/oauth-callback` | Handles OAuth redirect and token storage |
 
 ### Main Application Pages
@@ -939,12 +954,13 @@ frontend/
 │       └── FreelancerCard.tsx     # Freelancer grid card
 │
 ├── store/
-│   ├── index.ts                   # Redux store with 15 API slices
+│   ├── index.ts                   # Redux store with 14 API slices
 │   ├── provider.tsx               # StoreProvider component
 │   ├── slices/
 │   │   ├── authSlice.ts           # user, isAuthenticated state
 │   │   └── uiSlice.ts             # sidebar open/close, modal state
-│   └── api/                       # 15 RTK Query API slices
+│   └── api/                       # 14 RTK Query API slices
+│       ├── baseApi.ts
 │       ├── authApi.ts
 │       ├── usersApi.ts
 │       ├── projectsApi.ts
@@ -958,8 +974,7 @@ frontend/
 │       ├── messagesApi.ts
 │       ├── notificationsApi.ts
 │       ├── skillsApi.ts
-│       ├── statsApi.ts
-│       └── baseApi.ts
+│       └── statsApi.ts
 │
 ├── hooks/
 │   └── useDebounce.ts             # Generic debounce for search inputs
@@ -989,6 +1004,12 @@ A: The backend's `NotificationsService` is injected into other services (bids, c
 
 **Q: Is TypeORM synchronize safe for development?**  
 A: `synchronize: true` auto-creates/alters tables based on entity definitions. Fine for development — it means you never need to write migrations while building. For production, set `synchronize: false` and use `npm run migration:run`.
+
+**Q: Email verification isn't working — OTP emails aren't being received.**  
+A: You need a working SMTP server. For local development, use [Mailtrap](https://mailtrap.io) or [Ethereal](https://ethereal.email) — both are free sandboxes that catch emails without sending them. For Gmail, enable 2FA and create an App Password at `myaccount.google.com/apppasswords`. Set `MAIL_HOST`, `MAIL_PORT`, `MAIL_USER`, and `MAIL_PASS` in your `.env`.
+
+**Q: What does the platform fee do?**  
+A: When a client approves a milestone, the `PLATFORM_FEE_PERCENT` (default 10%) is deducted from the released amount before crediting the freelancer's wallet. A separate `platform_fee` payment record is created for auditing. The platform's revenue is visible in the Admin dashboard under platform stats.
 
 ---
 
