@@ -95,6 +95,14 @@ export class AuthController {
     return this.authService.verifyEmail(token);
   }
 
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Logout — client should discard tokens' })
+  async logout() {
+    return { message: 'Logged out successfully' };
+  }
+
   @Patch('change-password')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Change password (authenticated users only)' })

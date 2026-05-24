@@ -1,11 +1,18 @@
-﻿'use client';
+'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useGetConversationsQuery, useGetMessagesQuery, useSendMessageMutation } from '@/store/api/messagesApi';
+import {
+  useGetConversationsQuery,
+  useGetMessagesQuery,
+  useSendMessageMutation,
+  useMarkConversationReadMutation,
+} from '@/store/api/messagesApi';
 import { useAppSelector } from '@/store';
 import { formatRelativeTime } from '@/lib/utils';
-import { Send, Search, MessageSquare, Loader2, Smile } from 'lucide-react';
+import { Send, Search, MessageSquare, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+const POLL_INTERVAL = 5000; // 5 seconds
 
 export default function MessagesPage() {
   const { user } = useAppSelector((s) => s.auth);
@@ -14,18 +21,23 @@ export default function MessagesPage() {
   const [conversationSearch, setConversationSearch] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const { data: conversationsData, isLoading: loadingConversations } = useGetConversationsQuery({});
+  const { data: conversationsData, isLoading: loadingConversations } = useGetConversationsQuery(
+    {},
+    { pollingInterval: POLL_INTERVAL }
+  );
+
   const { data: messagesData, isLoading: loadingMessages } = useGetMessagesQuery(
     { conversationId: selectedConversation! },
-    { skip: !selectedConversation }
+    { skip: !selectedConversation, pollingInterval: POLL_INTERVAL }
   );
 
   const [sendMessage, { isLoading: sending }] = useSendMessageMutation();
+  const [markRead] = useMarkConversationReadMutation();
 
   const conversations = conversationsData?.data ?? [];
   const messages = messagesData?.data?.items ?? [];
 
-  const filteredConversations = conversations.filter((c) =>
+  const filteredConversations = conversations.filter((c: any) =>
     conversationSearch
       ? `${c.otherUser?.firstName} ${c.otherUser?.lastName}`.toLowerCase().includes(conversationSearch.toLowerCase())
       : true
@@ -34,6 +46,13 @@ export default function MessagesPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Mark conversation as read when selected
+  useEffect(() => {
+    if (selectedConversation) {
+      markRead(selectedConversation);
+    }
+  }, [selectedConversation]);
 
   const handleSend = async () => {
     if (!messageText.trim() || !selectedConversation || sending) return;
@@ -46,7 +65,7 @@ export default function MessagesPage() {
     }
   };
 
-  const selectedConv = conversations.find((c) => c.id === selectedConversation);
+  const selectedConv = conversations.find((c: any) => c.id === selectedConversation);
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
@@ -76,7 +95,7 @@ export default function MessagesPage() {
               <p className="text-sm text-gray-400">No conversations yet</p>
             </div>
           ) : (
-            filteredConversations.map((conv) => {
+            filteredConversations.map((conv: any) => {
               const other = conv.otherUser;
               const isSelected = conv.id === selectedConversation;
 
@@ -106,7 +125,10 @@ export default function MessagesPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <p className={cn('text-sm font-medium truncate', isSelected ? 'text-nexus-700 dark:text-nexus-300' : 'text-gray-900 dark:text-white')}>
+                      <p className={cn(
+                        'text-sm font-medium truncate',
+                        isSelected ? 'text-nexus-700 dark:text-nexus-300' : 'text-gray-900 dark:text-white'
+                      )}>
                         {other?.firstName} {other?.lastName}
                       </p>
                       <span className="text-xs text-gray-400 flex-shrink-0 ml-1">
@@ -170,10 +192,10 @@ export default function MessagesPage() {
               </div>
             ) : messages.length === 0 ? (
               <div className="text-center py-8 text-gray-400 text-sm">
-                No messages yet. Say hello! 👋
+                No messages yet. Say hello!
               </div>
             ) : (
-              messages.map((msg) => {
+              messages.map((msg: any) => {
                 const isMine = msg.sender?.id === user?.id;
                 return (
                   <div key={msg.id} className={cn('flex', isMine ? 'justify-end' : 'justify-start')}>
@@ -217,7 +239,6 @@ export default function MessagesPage() {
                 placeholder="Type a message... (Enter to send)"
                 rows={1}
                 className="flex-1 px-4 py-3 text-sm bg-gray-100 dark:bg-gray-800 border border-transparent rounded-xl focus:outline-none focus:border-nexus-500 focus:bg-white dark:focus:bg-gray-700 resize-none transition-all max-h-32"
-                style={{ height: 'auto' }}
               />
               <button
                 onClick={handleSend}
@@ -233,4 +254,3 @@ export default function MessagesPage() {
     </div>
   );
 }
-
