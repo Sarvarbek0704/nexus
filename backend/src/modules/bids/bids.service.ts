@@ -79,9 +79,7 @@ export class BidsService {
         await queryRunner.manager.save(milestones);
       }
 
-      await queryRunner.manager.update(Project, dto.projectId, {
-        bidsCount: () => 'bids_count + 1',
-      });
+      await queryRunner.manager.increment(Project, { id: dto.projectId }, 'bidsCount', 1);
 
       await queryRunner.commitTransaction();
 
@@ -221,7 +219,7 @@ export class BidsService {
         { status: BidStatus.REJECTED, rejectionReason: 'Another bid was accepted', rejectedAt: new Date() },
       );
 
-      const contractType = bid.milestones?.length > 0 ? ContractType.FIXED : ContractType.FIXED;
+      const contractType = bid.milestones?.length > 0 ? ContractType.FIXED : ContractType.HOURLY;
       const contract = queryRunner.manager.create(Contract, {
         contractNumber: generateContractNumber(),
         projectId: project.id,
@@ -302,9 +300,7 @@ export class BidsService {
     }
 
     await this.bidRepo.update(id, { status: BidStatus.WITHDRAWN });
-    await this.projectRepo.update(bid.projectId, {
-      bidsCount: () => 'bids_count - 1',
-    });
+    await this.projectRepo.decrement({ id: bid.projectId }, 'bidsCount', 1);
 
     return { message: 'Bid withdrawn successfully' };
   }

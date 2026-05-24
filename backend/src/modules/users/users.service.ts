@@ -159,11 +159,22 @@ export class UsersService {
 
   async adminGetUsers(query: any) {
     const { skip, take, page, limit } = getPagination(query);
-    const [data, total] = await this.userRepo.findAndCount({
-      order: { createdAt: 'DESC' },
-      skip,
-      take,
-    });
+
+    const qb = this.userRepo.createQueryBuilder('user').orderBy('user.createdAt', 'DESC');
+
+    if (query.search) {
+      qb.andWhere(
+        '(user.firstName ILIKE :s OR user.lastName ILIKE :s OR user.email ILIKE :s OR user.username ILIKE :s)',
+        { s: `%${query.search}%` },
+      );
+    }
+    if (query.role) qb.andWhere('user.role = :role', { role: query.role });
+    if (query.status && query.status !== 'all') {
+      qb.andWhere('user.status = :status', { status: query.status });
+    }
+
+    qb.skip(skip).take(take);
+    const [data, total] = await qb.getManyAndCount();
     return paginatedResponse(data, total, page, limit);
   }
 

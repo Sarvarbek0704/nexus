@@ -70,10 +70,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex">
       <Sidebar />
-      <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}`}>
+      <div className={`flex-1 flex flex-col transition-all duration-300 min-w-0 ${sidebarOpen ? 'lg:ml-64' : 'lg:ml-16'}`}>
         <Topbar />
-        <main className="flex-1 p-6 overflow-auto">
-          <div className="max-w-7xl mx-auto">
+        <main className="flex-1 overflow-auto">
+          <div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
             {children}
           </div>
         </main>

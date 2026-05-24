@@ -9,6 +9,7 @@ interface User {
   avatar?: string;
   isEmailVerified: boolean;
   walletBalance?: number;
+  escrowBalance?: number;
 }
 
 interface AuthState {

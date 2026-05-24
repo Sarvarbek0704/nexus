@@ -183,19 +183,9 @@ export class MilestonesService {
       const escrowAmount = Number(milestone.escrowAmount || milestone.amount);
 
       // Return escrow to client wallet
-      await queryRunner.manager.update(User, clientId, {
-        walletBalance: () => `wallet_balance + ${escrowAmount}`,
-        escrowBalance: () => `escrow_balance - ${escrowAmount}`,
-      });
-
-      // Release freelancer's escrow (they don't get paid)
-      await queryRunner.manager.update(User, contract.freelancerId, {
-        escrowBalance: () => `escrow_balance - ${escrowAmount}`,
-      });
-
-      await queryRunner.manager.update(Contract, contract.id, {
-        escrowAmount: () => `escrow_amount - ${escrowAmount}`,
-      });
+      await queryRunner.manager.increment(User, { id: clientId }, 'walletBalance', escrowAmount);
+      await queryRunner.manager.decrement(User, { id: clientId }, 'escrowBalance', escrowAmount);
+      await queryRunner.manager.decrement(Contract, { id: contract.id }, 'escrowAmount', escrowAmount);
 
       // Refund payment record
       await queryRunner.manager.save(Payment, {
@@ -271,19 +261,10 @@ export class MilestonesService {
       const platformFee = Number(milestone.amount) * (Number(contract.platformFeePercent) / 100);
       const netAmount = Number(milestone.amount) - platformFee;
 
-      await queryRunner.manager.update(User, contract.freelancerId, {
-        walletBalance: () => `wallet_balance + ${netAmount}`,
-        escrowBalance: () => `escrow_balance - ${milestone.amount}`,
-      });
-
-      await queryRunner.manager.update(User, clientId, {
-        escrowBalance: () => `escrow_balance - ${milestone.escrowAmount}`,
-      });
-
-      await queryRunner.manager.update(Contract, contract.id, {
-        paidAmount: () => `paid_amount + ${milestone.amount}`,
-        escrowAmount: () => `escrow_amount - ${milestone.escrowAmount}`,
-      });
+      await queryRunner.manager.increment(User, { id: contract.freelancerId }, 'walletBalance', netAmount);
+      await queryRunner.manager.decrement(User, { id: clientId }, 'escrowBalance', Number(milestone.escrowAmount));
+      await queryRunner.manager.increment(Contract, { id: contract.id }, 'paidAmount', Number(milestone.amount));
+      await queryRunner.manager.decrement(Contract, { id: contract.id }, 'escrowAmount', Number(milestone.escrowAmount));
 
       await queryRunner.manager.save(Payment, {
         transactionId: generateTransactionId(),

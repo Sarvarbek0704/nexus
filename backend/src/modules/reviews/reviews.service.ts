@@ -119,9 +119,7 @@ export class ReviewsService {
   }
 
   async markHelpful(reviewId: string) {
-    await this.reviewRepo.update(reviewId, {
-      helpfulCount: () => 'helpful_count + 1',
-    });
+    await this.reviewRepo.increment({ id: reviewId }, 'helpfulCount', 1);
     return { message: 'Marked as helpful' };
   }
 

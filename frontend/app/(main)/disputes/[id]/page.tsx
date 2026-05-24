@@ -33,7 +33,7 @@ export default function DisputeDetailPage() {
   const handleSend = async () => {
     if (!message.trim()) return;
     try {
-      await addMessage({ disputeId: id, message: message.trim() }).unwrap();
+      await addMessage({ id, message: message.trim() }).unwrap();
       setMessage('');
     } catch (err: any) {
       toast.error(err?.data?.message ?? 'Failed to send message');
@@ -226,7 +226,7 @@ export default function DisputeDetailPage() {
             <h3 className="font-semibold text-gray-900 dark:text-white mb-4">Parties Involved</h3>
             <div className="space-y-3">
               {[
-                { role: 'Complainant', person: dispute.complainant },
+                { role: 'Claimant', person: dispute.claimant },
                 { role: 'Respondent', person: dispute.respondent },
               ].map(({ role, person }) => person ? (
                 <div key={role} className="flex items-center gap-3">

@@ -23,7 +23,7 @@ export function AgencyDashboard() {
   const { data: contractsData } = useGetMyContractsQuery({ limit: 5, page: 1 });
 
   const stats = statsData?.data;
-  const contracts = contractsData?.data?.items ?? [];
+  const contracts = contractsData?.data ?? [];
   const earningsData = stats?.monthlyBreakdown ?? [];
 
   const contractStatusData = [
@@ -76,7 +76,7 @@ export function AgencyDashboard() {
         />
         <StatCard
           title="Agency Rating"
-          value={`${stats?.averageRating?.toFixed(1) ?? '0.0'} ★`}
+          value={`${Number(stats?.averageRating || 0).toFixed(1)} ★`}
           subtitle={`${stats?.totalReviews ?? 0} reviews`}
           icon={Star}
           color="orange"

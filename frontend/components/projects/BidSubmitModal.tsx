@@ -6,9 +6,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useCreateBidMutation } from '@/store/api/bidsApi';
 import { Project } from '@/types';
-import { X, Plus, Trash2, Loader2, DollarSign, Clock } from 'lucide-react';
+import { X, Plus, Trash2, Loader2, DollarSign, Clock, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 const milestoneSchema = z.object({
   title: z.string().min(1, 'Title required'),
@@ -34,6 +35,7 @@ interface BidSubmitModalProps {
 export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
   const [createBid, { isLoading }] = useCreateBidMutation();
   const [useMilestones, setUseMilestones] = useState(project.type === 'fixed');
+  const t = useT();
 
   const { register, control, handleSubmit, watch, formState: { errors } } = useForm<BidForm>({
     resolver: zodResolver(bidSchema),
@@ -50,8 +52,17 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
     try {
       await createBid({
         projectId: project.id,
-        ...data,
-        milestones: useMilestones ? data.milestones : undefined,
+        amount: data.bidAmount,
+        deliveryTime: data.deliveryDays,
+        deliveryUnit: 'days',
+        coverLetter: data.coverLetter,
+        milestones: useMilestones
+          ? data.milestones?.map((m) => ({
+              title: m.title,
+              description: m.description,
+              amount: m.amount,
+            }))
+          : undefined,
       }).unwrap();
       toast.success('Bid submitted successfully!');
       onClose();
@@ -67,7 +78,7 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Submit Your Bid</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.bid.submitTitle}</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate max-w-xs">{project.title}</p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
@@ -81,7 +92,7 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Your Bid Amount ($) *
+                {t.bid.amount}
               </label>
               <div className="relative">
                 <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -98,13 +109,13 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
               </div>
               {errors.bidAmount && <p className="text-xs text-red-500 mt-1">{errors.bidAmount.message}</p>}
               <p className="text-xs text-gray-400 mt-1">
-                Client budget: ${project.budgetMin}{project.budgetMax ? ` – $${project.budgetMax}` : ''}
+                {t.bid.clientBudget}: ${project.budgetMin}{project.budgetMax ? ` – $${project.budgetMax}` : ''}
               </p>
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Delivery Time (days) *
+                {t.bid.delivery}
               </label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -125,12 +136,12 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
           {/* Cover Letter */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Cover Letter *
+              {t.bid.coverLetter}
             </label>
             <textarea
               {...register('coverLetter')}
               rows={6}
-              placeholder="Introduce yourself, explain why you're the best fit for this project, describe your approach and relevant experience..."
+              placeholder={t.bid.coverPlaceholder}
               className={cn(
                 'w-full px-4 py-3 text-sm border rounded-lg focus:outline-none focus:border-nexus-500 focus:ring-1 focus:ring-nexus-500 bg-white dark:bg-gray-800 dark:border-gray-700 resize-none transition-all',
                 errors.coverLetter && 'border-red-400'
@@ -144,8 +155,8 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
             <div>
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Milestones</h3>
-                  <p className="text-xs text-gray-400">Break your work into deliverable milestones</p>
+                  <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.bid.milestones}</h3>
+                  <p className="text-xs text-gray-400">{t.bid.milestonesSub}</p>
                 </div>
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
@@ -154,7 +165,7 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
                     onChange={(e) => setUseMilestones(e.target.checked)}
                     className="accent-nexus-600"
                   />
-                  <span className="text-xs text-gray-600 dark:text-gray-400">Include milestones</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">{t.bid.includeMilestones}</span>
                 </label>
               </div>
 
@@ -214,12 +225,12 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
                     className="w-full flex items-center justify-center gap-2 py-2.5 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg text-sm text-gray-500 hover:border-nexus-400 hover:text-nexus-600 transition-colors"
                   >
                     <Plus className="w-4 h-4" />
-                    Add Milestone
+                    {t.bid.addMilestone}
                   </button>
 
                   {totalMilestoneAmount > 0 && (
                     <div className="flex items-center justify-between px-4 py-3 bg-nexus-50 dark:bg-nexus-950/30 rounded-lg text-sm">
-                      <span className="text-gray-600 dark:text-gray-400">Total milestone amount:</span>
+                      <span className="text-gray-600 dark:text-gray-400">{t.bid.totalMilestone}</span>
                       <span className="font-bold text-nexus-600 dark:text-nexus-400">${totalMilestoneAmount.toFixed(2)}</span>
                     </div>
                   )}
@@ -236,7 +247,7 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
             onClick={onClose}
             className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
           >
-            Cancel
+            {t.bid.cancel}
           </button>
           <button
             onClick={handleSubmit(onSubmit)}
@@ -244,7 +255,7 @@ export function BidSubmitModal({ project, onClose }: BidSubmitModalProps) {
             className="flex items-center gap-2 px-5 py-2.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            Submit Bid
+            {t.bid.submit}
           </button>
         </div>
       </div>

@@ -39,7 +39,7 @@ export const authApi = createApi({
       query: (body) => ({ url: '/auth/reset-password', method: 'POST', body }),
     }),
     changePassword: builder.mutation<void, { currentPassword: string; newPassword: string }>({
-      query: (body) => ({ url: '/auth/change-password', method: 'POST', body }),
+      query: (body) => ({ url: '/auth/change-password', method: 'PATCH', body }),
     }),
     refreshToken: builder.mutation<{ data: { accessToken: string; refreshToken: string } }, { refreshToken: string }>({
       query: (body) => ({ url: '/auth/refresh', method: 'POST', body }),

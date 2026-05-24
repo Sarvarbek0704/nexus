@@ -155,58 +155,130 @@ export class StatsService {
     const [
       totalBids,
       acceptedBids,
+      activeBids,
       totalContracts,
       completedContracts,
+      activeContracts,
+      pendingContracts,
+      disputedContracts,
       totalPostedProjects,
+      activeProjects,
+      totalReviews,
     ] = await Promise.all([
       this.bidRepo.count({ where: { bidderId: userId } }),
-      this.bidRepo.count({
-        where: { bidderId: userId, status: BidStatus.ACCEPTED },
-      }),
-      this.contractRepo.count({
-        where: [{ clientId: userId }, { freelancerId: userId }],
-      }),
+      this.bidRepo.count({ where: { bidderId: userId, status: BidStatus.ACCEPTED } }),
+      this.bidRepo.count({ where: { bidderId: userId, status: BidStatus.PENDING } }),
+      this.contractRepo.count({ where: [{ clientId: userId }, { freelancerId: userId }] }),
       this.contractRepo.count({
         where: [
           { clientId: userId, status: ContractStatus.COMPLETED },
           { freelancerId: userId, status: ContractStatus.COMPLETED },
         ],
       }),
+      this.contractRepo.count({
+        where: [
+          { clientId: userId, status: ContractStatus.ACTIVE },
+          { freelancerId: userId, status: ContractStatus.ACTIVE },
+        ],
+      }),
+      this.contractRepo.count({
+        where: [
+          { clientId: userId, status: ContractStatus.PENDING },
+          { freelancerId: userId, status: ContractStatus.PENDING },
+        ],
+      }),
+      this.contractRepo.count({
+        where: [
+          { clientId: userId, status: ContractStatus.DISPUTED },
+          { freelancerId: userId, status: ContractStatus.DISPUTED },
+        ],
+      }),
       this.projectRepo.count({ where: { clientId: userId } }),
+      this.projectRepo.count({ where: { clientId: userId, status: ProjectStatus.OPEN } }),
+      this.reviewRepo.count({ where: { revieweeId: userId } }),
     ]);
 
-    const earningsStats = await this.paymentRepo
-      .createQueryBuilder("p")
-      .where("p.payeeId = :userId AND p.type = :type AND p.status = :status", {
-        userId,
-        type: PaymentType.MILESTONE_PAYMENT,
-        status: PaymentStatus.COMPLETED,
-      })
-      .select([
-        "SUM(p.netAmount) as totalEarnings",
-        "AVG(p.netAmount) as avgPayment",
-        "COUNT(*) as totalPayments",
-      ])
-      .getRawOne();
+    const [earningsStats, spentStats, avgRatingResult, freelancersHiredResult] = await Promise.all([
+      this.paymentRepo
+        .createQueryBuilder("p")
+        .where("p.payeeId = :userId AND p.type = :type AND p.status = :status", {
+          userId,
+          type: PaymentType.MILESTONE_PAYMENT,
+          status: PaymentStatus.COMPLETED,
+        })
+        .select([
+          "COALESCE(SUM(p.netAmount), 0) as totalEarnings",
+          "COALESCE(AVG(p.netAmount), 0) as avgPayment",
+          "COUNT(*) as totalPayments",
+        ])
+        .getRawOne(),
+      this.paymentRepo
+        .createQueryBuilder("p")
+        .where("p.payerId = :userId AND p.type = :type AND p.status = :status", {
+          userId,
+          type: PaymentType.MILESTONE_PAYMENT,
+          status: PaymentStatus.COMPLETED,
+        })
+        .select("COALESCE(SUM(p.amount), 0) as totalSpent")
+        .getRawOne(),
+      this.reviewRepo
+        .createQueryBuilder("r")
+        .where("r.revieweeId = :userId", { userId })
+        .select("COALESCE(AVG(r.rating), 0) as avg")
+        .getRawOne()
+        .catch(() => ({ avg: 0 })),
+      this.contractRepo
+        .createQueryBuilder("c")
+        .where("c.clientId = :userId AND c.status = :status", { userId, status: ContractStatus.COMPLETED })
+        .select("COUNT(DISTINCT c.freelancerId)", "count")
+        .getRawOne()
+        .catch(() => ({ count: 0 })),
+    ]);
 
-    const spentStats = await this.paymentRepo
-      .createQueryBuilder("p")
-      .where("p.payerId = :userId AND p.type = :type AND p.status = :status", {
-        userId,
-        type: PaymentType.MILESTONE_PAYMENT,
-        status: PaymentStatus.COMPLETED,
-      })
-      .select("SUM(p.amount) as totalSpent")
-      .getRawOne();
+    const [monthlyEarnings, monthlySpending] = await Promise.all([
+      this.getMonthlyEarnings(userId),
+      this.getMonthlySpending(userId),
+    ]);
 
-    const monthlyEarnings = await this.getMonthlyEarnings(userId);
+    // Combine into monthly breakdown for charts
+    const monthlyBreakdown = monthlyEarnings.map((item, i) => ({
+      month: item.month,
+      earned: item.earnings,
+      spent: monthlySpending[i]?.spending ?? 0,
+    }));
+
+    const totalEarned = parseFloat(earningsStats?.totalearnings) || 0;
+    const totalSpent = parseFloat(spentStats?.totalspent) || 0;
+    const averageRating = parseFloat(avgRatingResult?.avg) || 0;
+    const bidWinRate = totalBids > 0 ? Math.round((acceptedBids / totalBids) * 100) : 0;
 
     return {
+      // Flat fields for dashboards
+      activeContracts,
+      completedContracts,
+      pendingContracts,
+      disputedContracts,
+      totalBidsSent: totalBids,
+      activeBids,
+      bidWinRate,
+      totalEarned,
+      totalSpent,
+      activeProjects,
+      completedProjects: completedContracts,
+      totalFreelancersHired: parseInt(String(freelancersHiredResult?.count)) || 0,
+      totalReviews,
+      averageRating,
+      monthlyBreakdown,
+      // Client-specific
+      totalBidsReceived: 0,
+      pendingMilestones: 0,
+      averageRatingGiven: 0,
+      teamMembers: 0,
+      // Legacy nested (kept for backward compatibility)
       bids: {
         total: totalBids,
         accepted: acceptedBids,
-        successRate:
-          totalBids > 0 ? Math.round((acceptedBids / totalBids) * 100) : 0,
+        successRate: bidWinRate,
       },
       contracts: {
         total: totalContracts,
@@ -214,14 +286,15 @@ export class StatsService {
       },
       projects: {
         posted: totalPostedProjects,
+        active: activeProjects,
       },
       earnings: {
-        total: parseFloat(earningsStats.totalearnings) || 0,
-        average: parseFloat(earningsStats.avgpayment) || 0,
-        totalPayments: parseInt(earningsStats.totalpayments) || 0,
+        total: totalEarned,
+        average: parseFloat(earningsStats?.avgpayment) || 0,
+        totalPayments: parseInt(earningsStats?.totalpayments) || 0,
       },
       spending: {
-        total: parseFloat(spentStats.totalspent) || 0,
+        total: totalSpent,
       },
       monthlyEarnings,
     };
@@ -340,6 +413,37 @@ export class StatsService {
         month: `${year}-${String(month).padStart(2, "0")}`,
         fees: parseFloat(fees.total) || 0,
         volume: parseFloat(volume.total) || 0,
+      });
+    }
+    return months;
+  }
+
+  private async getMonthlySpending(userId: string) {
+    const months = [];
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+
+      const spending = await this.paymentRepo
+        .createQueryBuilder("p")
+        .where(
+          "p.payerId = :userId AND EXTRACT(YEAR FROM p.createdAt) = :year AND EXTRACT(MONTH FROM p.createdAt) = :month AND p.type = :type AND p.status = :status",
+          {
+            userId,
+            year,
+            month,
+            type: PaymentType.MILESTONE_PAYMENT,
+            status: PaymentStatus.COMPLETED,
+          },
+        )
+        .select("COALESCE(SUM(p.amount), 0)", "total")
+        .getRawOne();
+
+      months.push({
+        month: `${year}-${String(month).padStart(2, "0")}`,
+        spending: parseFloat(spending.total) || 0,
       });
     }
     return months;

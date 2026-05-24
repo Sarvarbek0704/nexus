@@ -4,28 +4,30 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useGetAgenciesQuery } from '@/store/api/agenciesApi';
 import { useDebounce } from '@/hooks/useDebounce';
-import { formatRelativeTime } from '@/lib/utils';
 import { Pagination } from '@/components/ui/Pagination';
 import {
-  Building2, Search, Users, Star, MapPin, Globe, Briefcase,
+  Building2, Search, Users, Star, MapPin,
   Shield, Loader2, ChevronRight, SlidersHorizontal, X,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 const SIZE_OPTIONS = ['any', '1-5', '6-15', '16-50', '50+'];
-const SORT_OPTIONS = [
-  { label: 'Newest', value: 'createdAt:desc' },
-  { label: 'Highest Rated', value: 'rating:desc' },
-  { label: 'Most Projects', value: 'projects:desc' },
-  { label: 'Most Members', value: 'members:desc' },
-];
 
 export default function AgenciesPage() {
+  const t = useT();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [size, setSize] = useState('any');
   const [sort, setSort] = useState('createdAt:desc');
   const [showFilters, setShowFilters] = useState(false);
+
+  const SORT_OPTIONS = [
+    { label: t.agencies.sort.newest, value: 'createdAt:desc' },
+    { label: t.agencies.sort.topRated, value: 'rating:desc' },
+    { label: t.agencies.sort.mostProjects, value: 'projects:desc' },
+    { label: t.agencies.sort.mostMembers, value: 'members:desc' },
+  ];
 
   const debouncedSearch = useDebounce(search, 400);
   const [sortBy, sortOrder] = sort.split(':');
@@ -39,32 +41,31 @@ export default function AgenciesPage() {
     sortOrder,
   });
 
-  const agencies = data?.data?.items ?? [];
-  const meta = data?.data?.meta;
+  const agencies = data?.data ?? [];
+  const meta = data?.meta;
 
   const activeFilters = [
-    ...(size !== 'any' ? [{ key: 'size', label: `Size: ${size}` }] : []),
+    ...(size !== 'any' ? [{ key: 'size', label: `${t.agencies.teamSize}: ${size}` }] : []),
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Agencies</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.agencies.title}</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            {meta?.total ?? 0} agencies available for hire
+            {meta?.total ?? 0} {t.agencies.available}
           </p>
         </div>
       </div>
 
-      {/* Search & Controls */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            placeholder="Search agencies by name, expertise..."
+            placeholder={t.agencies.search}
             className="w-full pl-9 pr-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-400"
           />
           {search && (
@@ -92,7 +93,7 @@ export default function AgenciesPage() {
           )}
         >
           <SlidersHorizontal className="w-4 h-4" />
-          Filters
+          {t.agencies.filters}
           {activeFilters.length > 0 && (
             <span className="w-5 h-5 rounded-full bg-nexus-600 text-white text-xs flex items-center justify-center">
               {activeFilters.length}
@@ -101,7 +102,6 @@ export default function AgenciesPage() {
         </button>
       </div>
 
-      {/* Active Filters */}
       {activeFilters.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {activeFilters.map((f) => (
@@ -113,17 +113,16 @@ export default function AgenciesPage() {
             </span>
           ))}
           <button onClick={() => { setSize('any'); setPage(1); }} className="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-            Clear all
+            {t.agencies.clearAll}
           </button>
         </div>
       )}
 
       <div className="flex gap-6">
-        {/* Filters Sidebar */}
         {showFilters && (
           <aside className="w-56 flex-shrink-0 space-y-5">
             <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-5">
-              <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Team Size</h4>
+              <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">{t.agencies.teamSize}</h4>
               <div className="space-y-2">
                 {SIZE_OPTIONS.map((s) => (
                   <label key={s} className="flex items-center gap-2 cursor-pointer">
@@ -136,7 +135,7 @@ export default function AgenciesPage() {
                       className="accent-nexus-600"
                     />
                     <span className="text-sm text-gray-700 dark:text-gray-300 capitalize">
-                      {s === 'any' ? 'Any size' : `${s} members`}
+                      {s === 'any' ? t.agencies.anySize : `${s} ${t.agencies.members}`}
                     </span>
                   </label>
                 ))}
@@ -145,7 +144,6 @@ export default function AgenciesPage() {
           </aside>
         )}
 
-        {/* Agency Grid */}
         <div className="flex-1">
           {isLoading ? (
             <div className="flex justify-center py-20">
@@ -154,13 +152,13 @@ export default function AgenciesPage() {
           ) : agencies.length === 0 ? (
             <div className="text-center py-20">
               <Building2 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">No agencies found</h3>
-              <p className="text-gray-500 dark:text-gray-400 mt-2">Try adjusting your search or filters</p>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t.agencies.noResults}</h3>
+              <p className="text-gray-500 dark:text-gray-400 mt-2">{t.agencies.noResultsSub}</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
               {agencies.map((agency) => (
-                <AgencyCard key={agency.id} agency={agency} />
+                <AgencyCard key={agency.id} agency={agency} t={t} />
               ))}
             </div>
           )}
@@ -176,7 +174,7 @@ export default function AgenciesPage() {
   );
 }
 
-function AgencyCard({ agency }: { agency: any }) {
+function AgencyCard({ agency, t }: { agency: any; t: any }) {
   return (
     <Link
       href={`/agencies/${agency.id}`}
@@ -211,7 +209,6 @@ function AgencyCard({ agency }: { agency: any }) {
         </p>
       )}
 
-      {/* Skills */}
       {agency.skills && agency.skills.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-4">
           {agency.skills.slice(0, 4).map((skill: any) => (

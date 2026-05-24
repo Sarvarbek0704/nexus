@@ -23,16 +23,27 @@ export const milestonesApi = createApi({
       query: (id) => `/milestones/${id}`,
       providesTags: ['Milestone'],
     }),
-    submitMilestone: builder.mutation<any, { id: string; body: any }>({
-      query: ({ id, body }) => ({ url: `/milestones/${id}/submit`, method: 'POST', body }),
+    submitMilestone: builder.mutation<any, { milestoneId: string; description: string; attachments?: string[]; deliverableLinks?: string[] }>({
+      query: ({ milestoneId, ...body }) => ({
+        url: `/milestones/${milestoneId}/submit`,
+        method: 'POST',
+        body,
+      }),
       invalidatesTags: ['Milestone'],
     }),
-    reviewMilestone: builder.mutation<any, { id: string; action: string; feedback?: string }>({
-      query: ({ id, ...body }) => ({ url: `/milestones/${id}/review`, method: 'POST', body }),
+    reviewMilestone: builder.mutation<any, { milestoneId: string; action: 'approve' | 'reject' | 'request_revision'; feedback?: string }>({
+      query: ({ milestoneId, ...body }) => ({
+        url: `/milestones/${milestoneId}/review`,
+        method: 'PATCH',
+        body,
+      }),
       invalidatesTags: ['Milestone'],
     }),
-    fundMilestoneEscrow: builder.mutation<any, string>({
-      query: (id) => ({ url: `/milestones/${id}/fund-escrow`, method: 'POST' }),
+    fundMilestoneEscrow: builder.mutation<any, { contractId: string; milestoneId: string }>({
+      query: ({ contractId, milestoneId }) => ({
+        url: `/contracts/${contractId}/milestones/${milestoneId}/fund-escrow`,
+        method: 'POST',
+      }),
       invalidatesTags: ['Milestone'],
     }),
   }),

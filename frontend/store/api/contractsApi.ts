@@ -16,15 +16,19 @@ export const contractsApi = createApi({
   tagTypes: ['Contract'],
   endpoints: (builder) => ({
     getMyContracts: builder.query<any, any>({
-      query: (params) => ({ url: '/contracts/my', params }),
+      query: (params) => ({ url: '/contracts', params }),
       providesTags: ['Contract'],
     }),
     getContract: builder.query<any, string>({
       query: (id) => `/contracts/${id}`,
       providesTags: ['Contract'],
     }),
+    getContractSummary: builder.query<any, string>({
+      query: (id) => `/contracts/${id}/summary`,
+      providesTags: ['Contract'],
+    }),
     signContract: builder.mutation<any, string>({
-      query: (id) => ({ url: `/contracts/${id}/sign`, method: 'POST' }),
+      query: (id) => ({ url: `/contracts/${id}/sign`, method: 'PATCH' }),
       invalidatesTags: ['Contract'],
     }),
     updateContractStatus: builder.mutation<any, { id: string; status: string; reason?: string }>({
@@ -35,13 +39,22 @@ export const contractsApi = createApi({
       query: (params) => ({ url: '/contracts', params }),
       providesTags: ['Contract'],
     }),
+    fundEscrow: builder.mutation<any, { contractId: string; milestoneId: string }>({
+      query: ({ contractId, milestoneId }) => ({
+        url: `/contracts/${contractId}/milestones/${milestoneId}/fund-escrow`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['Contract'],
+    }),
   }),
 });
 
 export const {
   useGetMyContractsQuery,
   useGetContractQuery,
+  useGetContractSummaryQuery,
   useSignContractMutation,
   useUpdateContractStatusMutation,
   useGetAllContractsQuery,
+  useFundEscrowMutation,
 } = contractsApi;

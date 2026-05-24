@@ -42,6 +42,20 @@ export class ProjectsController {
     return this.projectsService.getFeaturedProjects();
   }
 
+  @Get('my')
+  @Roles(UserRole.CLIENT, UserRole.AGENCY_OWNER)
+  @ApiOperation({ summary: 'Get my posted projects' })
+  getMyProjects(@CurrentUser() user: User, @Query() query: QueryProjectDto) {
+    return this.projectsService.getClientProjects(user.id, query);
+  }
+
+  @Get('admin/all')
+  @Roles(UserRole.ADMIN)
+  @ApiOperation({ summary: '[Admin] Get all projects with any status' })
+  adminGetAll(@Query() query: any) {
+    return this.projectsService.adminFindAll(query);
+  }
+
   @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Get project by ID' })
@@ -60,13 +74,6 @@ export class ProjectsController {
   @ApiOperation({ summary: 'Get project bid statistics (client only)' })
   getStats(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user: User) {
     return this.projectsService.getProjectStats(id, user.id);
-  }
-
-  @Get('my/projects')
-  @Roles(UserRole.CLIENT, UserRole.AGENCY_OWNER)
-  @ApiOperation({ summary: 'Get my posted projects' })
-  getMyProjects(@CurrentUser() user: User, @Query() query: QueryProjectDto) {
-    return this.projectsService.getClientProjects(user.id, query);
   }
 
   @Patch(':id')

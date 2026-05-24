@@ -2,7 +2,7 @@ import {
   Injectable, NotFoundException, ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Message, MessageType } from '../../database/entities/message.entity';
 import { Conversation, ConversationType } from '../../database/entities/conversation.entity';
 import { User } from '../../database/entities/user.entity';
@@ -46,17 +46,76 @@ export class MessagesService {
   async getMyConversations(userId: string, query: any) {
     const { skip, take, page, limit } = getPagination(query);
 
-    const [data, total] = await this.convRepo
+    // Step 1: get IDs of conversations the user participates in
+    const participatingIds = await this.convRepo
       .createQueryBuilder('conv')
-      .innerJoin('conv.participants', 'p', 'p.id = :userId', { userId })
-      .leftJoinAndSelect('conv.participants', 'participants')
-      .leftJoinAndSelect('conv.project', 'project')
-      .orderBy('conv.lastMessageAt', 'DESC', 'NULLS LAST')
-      .skip(skip)
-      .take(take)
-      .getManyAndCount();
+      .select('conv.id', 'id')
+      .innerJoin('conv.participants', 'p')
+      .where('p.id = :userId', { userId })
+      .getRawMany()
+      .then((rows) => rows.map((r) => r.id));
+
+    if (participatingIds.length === 0) {
+      return paginatedResponse([], 0, page, limit);
+    }
+
+    // Step 2: load those conversations with all participants
+    const [convs, total] = await this.convRepo.findAndCount({
+      where: { id: In(participatingIds) },
+      relations: ['participants', 'project'],
+      order: { lastMessageAt: 'DESC' },
+      skip,
+      take,
+    });
+
+    // Count unread messages per conversation
+    const unreadCounts = await this.messageRepo
+      .createQueryBuilder('msg')
+      .select('msg.conversationId', 'conversationId')
+      .addSelect('COUNT(msg.id)', 'count')
+      .where('msg.conversationId IN (:...ids)', { ids: convs.map((c) => c.id) })
+      .andWhere('msg.senderId != :userId', { userId })
+      .andWhere('msg.status != :status', { status: 'read' })
+      .andWhere('msg.isDeleted = false')
+      .groupBy('msg.conversationId')
+      .getRawMany()
+      .catch(() => []);
+
+    const unreadMap: Record<string, number> = {};
+    for (const row of unreadCounts) {
+      unreadMap[row.conversationId] = parseInt(row.count, 10);
+    }
+
+    const data = convs.map((conv) => ({
+      ...conv,
+      otherUser: conv.participants?.find((p) => p.id !== userId) ?? null,
+      unreadCount: unreadMap[conv.id] ?? 0,
+    }));
 
     return paginatedResponse(data, total, page, limit);
+  }
+
+  async markConversationRead(conversationId: string, userId: string) {
+    const conv = await this.convRepo.findOne({
+      where: { id: conversationId },
+      relations: ['participants'],
+    });
+    if (!conv) throw new NotFoundException('Conversation not found');
+
+    const isParticipant = conv.participants.some((p) => p.id === userId);
+    if (!isParticipant) throw new ForbiddenException();
+
+    await this.messageRepo
+      .createQueryBuilder()
+      .update()
+      .set({ status: 'read' } as any)
+      .where('conversationId = :conversationId', { conversationId })
+      .andWhere('senderId != :userId', { userId })
+      .andWhere('status != :status', { status: 'read' })
+      .execute()
+      .catch(() => null);
+
+    return { message: 'Marked as read' };
   }
 
   async getMessages(conversationId: string, userId: string, query: any) {

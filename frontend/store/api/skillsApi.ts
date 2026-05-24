@@ -20,7 +20,7 @@ export const skillsApi = createApi({
       providesTags: ['Skill'],
     }),
     getCategories: builder.query<any, void>({
-      query: () => '/skills/categories',
+      query: () => '/categories',
       providesTags: ['Category'],
     }),
     createSkill: builder.mutation<any, any>({
@@ -28,7 +28,7 @@ export const skillsApi = createApi({
       invalidatesTags: ['Skill'],
     }),
     createCategory: builder.mutation<any, any>({
-      query: (body) => ({ url: '/skills/categories', method: 'POST', body }),
+      query: (body) => ({ url: '/categories', method: 'POST', body }),
       invalidatesTags: ['Category'],
     }),
   }),

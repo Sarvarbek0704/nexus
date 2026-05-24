@@ -7,16 +7,17 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { toast } from 'sonner';
-import { Eye, EyeOff, Github, Chrome, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Github, ArrowRight, Loader2, Globe, ChevronDown } from 'lucide-react';
 import { useLoginMutation } from '@/store/api/authApi';
 import { setUser } from '@/store/slices/authSlice';
 import { setTokens } from '@/lib/api';
 import { useAppDispatch } from '@/store';
-import Image from 'next/image';
+import { useI18n, useT, LANGUAGE_LABELS, Language } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email(),
+  password: z.string().min(1),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -25,7 +26,10 @@ export default function LoginPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const [login, { isLoading }] = useLoginMutation();
+  const t = useT();
+  const { lang, setLang } = useI18n();
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -36,13 +40,12 @@ export default function LoginPage() {
       const result = await login(values).unwrap();
       setTokens(result.data.accessToken, result.data.refreshToken);
       dispatch(setUser(result.data.user));
-      toast.success(`Welcome back, ${result.data.user.firstName}!`);
+      toast.success(`${t.login.welcomeBack}, ${result.data.user.firstName}!`);
       router.push('/dashboard');
     } catch (err: any) {
-      // If email not verified, redirect to OTP page
       if (err?.data?.requiresVerification || err?.data?.error?.requiresVerification) {
         const email = err?.data?.email || err?.data?.error?.email || values.email;
-        toast.info('Please verify your email first');
+        toast.info(t.verifyEmail.title);
         router.push(`/verify-email?email=${encodeURIComponent(email)}`);
         return;
       }
@@ -53,7 +56,8 @@ export default function LoginPage() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
   return (
-    <div className="min-h-screen flex">
+    <div className="fixed inset-0 flex overflow-hidden">
+      {/* Left panel – hidden on mobile */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-nexus-600 to-nexus-900 flex-col justify-between p-12">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
@@ -64,20 +68,16 @@ export default function LoginPage() {
 
         <div className="space-y-8">
           <div>
-            <h1 className="text-4xl font-bold text-white leading-tight">
-              The smarter way to<br />hire top talent
-            </h1>
-            <p className="text-nexus-200 mt-4 text-lg">
-              Connect with world-class freelancers and agencies. Contracts, milestones, and escrow payments — all in one platform.
-            </p>
+            <h1 className="text-4xl font-bold text-white leading-tight">{t.login.tagline}</h1>
+            <p className="text-nexus-200 mt-4 text-lg">{t.login.taglineSub}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             {[
-              { label: 'Freelancers', value: '50K+' },
-              { label: 'Projects Completed', value: '200K+' },
-              { label: 'Agencies', value: '5K+' },
-              { label: 'Countries', value: '150+' },
+              { label: t.login.stat_freelancers, value: '50K+' },
+              { label: t.login.stat_projects, value: '200K+' },
+              { label: t.login.stat_agencies, value: '5K+' },
+              { label: t.login.stat_countries, value: '150+' },
             ].map((stat) => (
               <div key={stat.label} className="bg-white/10 rounded-xl p-4">
                 <div className="text-2xl font-bold text-white">{stat.value}</div>
@@ -87,37 +87,61 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-2">
-            {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="w-8 h-8 rounded-full bg-nexus-400 border-2 border-nexus-600" />
-            ))}
-          </div>
-          <p className="text-nexus-200 text-sm">
-            Join 50,000+ professionals already using Nexus
-          </p>
-        </div>
+        <p className="text-nexus-200 text-sm">{t.login.joinLine}</p>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md space-y-8">
-          <div className="lg:hidden flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-nexus-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">N</span>
+      {/* Right panel */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 overflow-y-auto bg-white dark:bg-gray-950">
+        <div className="w-full max-w-md space-y-6 sm:space-y-8">
+          {/* Mobile logo + lang */}
+          <div className="flex items-center justify-between lg:hidden">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-nexus-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold">N</span>
+              </div>
+              <span className="font-bold text-xl">Nexus</span>
+            </Link>
+            {/* Language switcher mobile */}
+            <div className="relative">
+              <button
+                onClick={() => setLangOpen((o) => !o)}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400"
+              >
+                <Globe className="w-4 h-4" />
+                <span className="uppercase font-medium">{lang}</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+              {langOpen && (
+                <div className="absolute right-0 top-full mt-1 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-1 min-w-[140px] z-50">
+                  {(Object.keys(LANGUAGE_LABELS) as Language[]).map((l) => (
+                    <button
+                      key={l}
+                      onClick={() => { setLang(l); setLangOpen(false); }}
+                      className={cn(
+                        'w-full flex items-center gap-2.5 px-3 py-2 text-sm',
+                        lang === l ? 'bg-nexus-50 text-nexus-700 font-medium' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                      )}
+                    >
+                      <span>{LANGUAGE_LABELS[l].flag}</span>
+                      <span>{LANGUAGE_LABELS[l].label}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
-            <span className="font-bold text-xl">Nexus</span>
           </div>
 
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">
-              Don't have an account?{' '}
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{t.login.welcomeBack}</h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm sm:text-base">
+              {t.login.noAccount}{' '}
               <Link href="/register" className="text-nexus-600 hover:underline font-medium">
-                Sign up for free
+                {t.login.signUpFree}
               </Link>
             </p>
           </div>
 
+          {/* Social login */}
           <div className="grid grid-cols-2 gap-3">
             <a
               href={`${API_URL}/auth/google`}
@@ -145,34 +169,32 @@ export default function LoginPage() {
               <div className="w-full border-t border-gray-200 dark:border-gray-700" />
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white dark:bg-gray-950 text-gray-500">or continue with email</span>
+              <span className="px-4 bg-white dark:bg-gray-950 text-gray-500">{t.login.orContinue}</span>
             </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Email address
+                {t.login.emailLabel}
               </label>
               <input
                 {...register('email')}
                 type="email"
                 autoComplete="email"
                 placeholder="john@example.com"
-                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white transition-shadow"
+                className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white transition-shadow text-sm"
               />
-              {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-              )}
+              {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
             </div>
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Password
+                  {t.login.passwordLabel}
                 </label>
-                <Link href="/forgot-password" className="text-sm text-nexus-600 hover:underline">
-                  Forgot password?
+                <Link href="/forgot-password" className="text-xs sm:text-sm text-nexus-600 hover:underline">
+                  {t.login.forgotPassword}
                 </Link>
               </div>
               <div className="relative">
@@ -181,7 +203,7 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
                   placeholder="••••••••"
-                  className="w-full px-4 py-2.5 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white transition-shadow"
+                  className="w-full px-4 py-2.5 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white transition-shadow text-sm"
                 />
                 <button
                   type="button"
@@ -191,21 +213,19 @@ export default function LoginPage() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
-              )}
+              {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <>
-                  Sign in
+                  {t.login.signIn}
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}
@@ -213,9 +233,10 @@ export default function LoginPage() {
           </form>
 
           <p className="text-center text-xs text-gray-400">
-            By signing in, you agree to our{' '}
-            <Link href="/terms" className="underline">Terms of Service</Link> and{' '}
-            <Link href="/privacy" className="underline">Privacy Policy</Link>
+            {t.login.termsNote}{' '}
+            <Link href="/terms" className="underline">{t.login.terms}</Link>{' '}
+            {t.login.and}{' '}
+            <Link href="/privacy" className="underline">{t.login.privacy}</Link>
           </p>
         </div>
       </div>

@@ -68,12 +68,25 @@ export class DisputesController {
     @CurrentUser() user: User,
     @Body() dto: {
       resolution: string;
-      status: DisputeStatus;
+      outcome?: string;
+      status?: DisputeStatus;
       claimantSharePercent?: number;
       respondentSharePercent?: number;
       resolvedAmount?: number;
     },
   ) {
-    return this.disputesService.resolve(id, user.id, dto as any);
+    // Map outcome string to DisputeStatus
+    let status = dto.status;
+    if (!status && dto.outcome) {
+      const outcomeMap: Record<string, DisputeStatus> = {
+        favor_complainant: DisputeStatus.RESOLVED_CLAIMANT,
+        favor_claimant: DisputeStatus.RESOLVED_CLAIMANT,
+        favor_respondent: DisputeStatus.RESOLVED_RESPONDENT,
+        split: DisputeStatus.RESOLVED_SPLIT,
+        dismiss: DisputeStatus.CLOSED,
+      };
+      status = outcomeMap[dto.outcome] ?? DisputeStatus.RESOLVED_CLAIMANT;
+    }
+    return this.disputesService.resolve(id, user.id, { ...dto, status } as any);
   }
 }

@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
 import { ReduxProvider } from '@/store/provider';
+import { I18nProvider } from '@/lib/i18n';
 import './globals.css';
 
 const inter = Inter({
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+        <I18nProvider>
         <ReduxProvider>
           <ThemeProvider
             attribute="class"
@@ -75,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             />
           </ThemeProvider>
         </ReduxProvider>
+        </I18nProvider>
       </body>
     </html>
   );

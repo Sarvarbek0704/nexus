@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { Plus, Trash2, ChevronLeft, Loader2, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 const milestoneSchema = z.object({
   title: z.string().min(1),
@@ -36,10 +37,11 @@ const projectSchema = z.object({
 
 type ProjectForm = z.infer<typeof projectSchema>;
 
-const STEPS = ['Basics', 'Details', 'Budget', 'Milestones', 'Review'];
+// STEPS is now derived inside the component from t.projects.post.steps
 
 export default function PostProjectPage() {
   const router = useRouter();
+  const t = useT();
   const [step, setStep] = useState(0);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
   const [skillSearch, setSkillSearch] = useState('');
@@ -65,6 +67,7 @@ export default function PostProjectPage() {
   const { fields, append, remove } = useFieldArray({ control, name: 'milestones' });
   const projectType = watch('type');
   const watchedValues = watch();
+  const STEPS = t.projects.post.steps as unknown as string[];
 
   const toggleSkill = (skillId: string) => {
     const updated = selectedSkills.includes(skillId)
@@ -76,7 +79,16 @@ export default function PostProjectPage() {
 
   const onSubmit = async (data: ProjectForm) => {
     try {
-      const result = await createProject({ ...data, skills: selectedSkills }).unwrap();
+      const { skills: _skills, ...rest } = data;
+      const payload: any = {
+        ...rest,
+        skillIds: selectedSkills,
+        deadline: data.deadline ? new Date(data.deadline).toISOString() : undefined,
+        requirements: data.requirements
+          ? data.requirements.split('\n').filter((l) => l.trim())
+          : undefined,
+      };
+      const result = await createProject(payload).unwrap();
       toast.success('Project posted successfully!');
       router.push(`/projects/${result.data.id}`);
     } catch (err: any) {
@@ -84,15 +96,35 @@ export default function PostProjectPage() {
     }
   };
 
+  const onValidationError = (errors: any) => {
+    // Navigate to the first step that has an error
+    const step0Fields = ['title', 'description'];
+    const step1Fields = ['categoryId', 'skills'];
+    const step2Fields = ['budgetMin', 'budgetMax', 'deadline'];
+
+    if (step0Fields.some((f) => errors[f])) {
+      setStep(0);
+      toast.error('Please fill in the project basics first.');
+    } else if (step1Fields.some((f) => errors[f])) {
+      setStep(1);
+      toast.error('Please select a category and at least one skill.');
+    } else if (step2Fields.some((f) => errors[f])) {
+      setStep(2);
+      toast.error('Please set the budget.');
+    } else {
+      toast.error('Please complete all required fields.');
+    }
+  };
+
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <Link href="/projects" className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white mb-5 transition-colors">
-        <ChevronLeft className="w-4 h-4" /> Back to Projects
+        <ChevronLeft className="w-4 h-4" /> {t.projects.post.back}
       </Link>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Post a Project</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Find the perfect freelancer for your project.</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.projects.post.title}</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t.projects.post.subtitle}</p>
       </div>
 
       {/* Steps */}
@@ -120,14 +152,14 @@ export default function PostProjectPage() {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onValidationError)}>
         {/* Step 0: Basics */}
         {step === 0 && (
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Project Basics</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.projects.post.basics}</h2>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Project Title *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.titleLabel}</label>
               <input
                 {...register('title')}
                 placeholder="e.g. Build a full-stack e-commerce platform with React and Node.js"
@@ -137,7 +169,7 @@ export default function PostProjectPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.descLabel}</label>
               <textarea
                 {...register('description')}
                 rows={6}
@@ -148,7 +180,7 @@ export default function PostProjectPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Requirements (optional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.reqLabel}</label>
               <textarea
                 {...register('requirements')}
                 rows={4}
@@ -162,23 +194,23 @@ export default function PostProjectPage() {
         {/* Step 1: Details */}
         {step === 1 && (
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Project Details</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.projects.post.details}</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Category *</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.category}</label>
                 <select
                   {...register('categoryId')}
                   className={cn('w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 dark:border-gray-700', errors.categoryId && 'border-red-400')}
                 >
-                  <option value="">Select category...</option>
+                  <option value="">{t.projects.post.selectCategory}</option>
                   {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
                 </select>
                 {errors.categoryId && <p className="text-xs text-red-500 mt-1">{errors.categoryId.message}</p>}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Experience Level</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.experience}</label>
                 <select
                   {...register('experienceRequired')}
                   className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 capitalize"
@@ -192,7 +224,7 @@ export default function PostProjectPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Project Type</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.type}</label>
                 <div className="flex gap-2">
                   {['fixed', 'hourly'].map((type) => (
                     <button
@@ -213,24 +245,24 @@ export default function PostProjectPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Visibility</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.visibility}</label>
                 <select
                   {...register('visibility')}
                   className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800"
                 >
-                  <option value="public">Public</option>
-                  <option value="private">Private</option>
-                  <option value="invite_only">Invite Only</option>
+                  <option value="public">{t.projects.post.public}</option>
+                  <option value="private">{t.projects.post.private}</option>
+                  <option value="invite_only">{t.projects.post.inviteOnly}</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Required Skills * ({selectedSkills.length}/15)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.projects.post.skills} ({selectedSkills.length}/15)</label>
               <input
                 value={skillSearch}
                 onChange={(e) => setSkillSearch(e.target.value)}
-                placeholder="Search skills..."
+                placeholder={t.projects.post.searchSkills}
                 className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 mb-3"
               />
               <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto scrollbar-thin">
@@ -258,12 +290,12 @@ export default function PostProjectPage() {
         {/* Step 2: Budget */}
         {step === 2 && (
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Budget & Timeline</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.projects.post.budgetTitle}</h2>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                  {projectType === 'fixed' ? 'Budget Min ($)' : 'Hourly Rate Min ($/hr)'} *
+                  {projectType === 'fixed' ? t.projects.post.budgetMin : t.projects.post.hourlyMin}
                 </label>
                 <input
                   {...register('budgetMin')}
@@ -277,7 +309,7 @@ export default function PostProjectPage() {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                  {projectType === 'fixed' ? 'Budget Max ($)' : 'Hourly Rate Max ($/hr)'}
+                  {projectType === 'fixed' ? t.projects.post.budgetMax : t.projects.post.hourlyMax}
                 </label>
                 <input
                   {...register('budgetMax')}
@@ -290,7 +322,7 @@ export default function PostProjectPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Deadline (optional)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projects.post.deadlineLabel}</label>
               <input
                 {...register('deadline')}
                 type="date"
@@ -305,14 +337,14 @@ export default function PostProjectPage() {
         {step === 3 && (
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Milestones (optional)</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Break the project into phases to manage payments and deliverables.</p>
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.projects.post.milestonesTitle}</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{t.projects.post.milestonesSub}</p>
             </div>
 
             {fields.map((field, idx) => (
               <div key={field.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-gray-800/50">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Milestone {idx + 1}</span>
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t.projects.post.milestoneN} {idx + 1}</span>
                   <button type="button" onClick={() => remove(idx)} className="text-red-400 hover:text-red-600">
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -353,7 +385,7 @@ export default function PostProjectPage() {
               onClick={() => append({ title: '', amount: 0, durationDays: 7 })}
               className="w-full flex items-center justify-center gap-2 py-3 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl text-sm text-gray-500 hover:border-nexus-400 hover:text-nexus-600 transition-colors"
             >
-              <Plus className="w-4 h-4" /> Add Milestone
+              <Plus className="w-4 h-4" /> {t.projects.post.addMilestone}
             </button>
           </div>
         )}
@@ -361,7 +393,7 @@ export default function PostProjectPage() {
         {/* Step 4: Review */}
         {step === 4 && (
           <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Review & Post</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.projects.post.review}</h2>
 
             <div className="space-y-3 text-sm">
               <div className="flex gap-4 p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
@@ -374,10 +406,10 @@ export default function PostProjectPage() {
 
               <div className="grid grid-cols-2 gap-3">
                 {[
-                  { label: 'Type', value: watchedValues.type },
-                  { label: 'Experience', value: watchedValues.experienceRequired },
-                  { label: 'Budget', value: watchedValues.budgetMin ? `$${watchedValues.budgetMin}${watchedValues.budgetMax ? ` – $${watchedValues.budgetMax}` : ''}` : '—' },
-                  { label: 'Skills', value: `${selectedSkills.length} selected` },
+                  { label: t.projects.post.type2, value: watchedValues.type },
+                  { label: t.projects.post.experienceLabel, value: watchedValues.experienceRequired },
+                  { label: t.projects.post.budgetLabel, value: watchedValues.budgetMin ? `$${watchedValues.budgetMin}${watchedValues.budgetMax ? ` – $${watchedValues.budgetMax}` : ''}` : '—' },
+                  { label: t.projects.post.skills.replace(' *', ''), value: `${selectedSkills.length} ${t.projects.post.skillsSelected}` },
                 ].map((item) => (
                   <div key={item.label} className="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                     <p className="text-xs text-gray-400">{item.label}</p>
@@ -388,7 +420,7 @@ export default function PostProjectPage() {
             </div>
 
             <p className="text-xs text-gray-400 text-center">
-              By posting this project, you agree to Nexus Terms of Service and Privacy Policy.
+              {t.projects.post.termsNote}
             </p>
           </div>
         )}
@@ -401,7 +433,7 @@ export default function PostProjectPage() {
             disabled={step === 0}
             className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            Previous
+            {t.projects.post.prev}
           </button>
 
           {step < STEPS.length - 1 ? (
@@ -410,7 +442,7 @@ export default function PostProjectPage() {
               onClick={() => setStep((s) => Math.min(STEPS.length - 1, s + 1))}
               className="px-5 py-2.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium text-sm transition-colors"
             >
-              Next Step
+              {t.projects.post.next}
             </button>
           ) : (
             <button
@@ -419,7 +451,7 @@ export default function PostProjectPage() {
               className="flex items-center gap-2 px-5 py-2.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium text-sm transition-colors disabled:opacity-50"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Briefcase className="w-4 h-4" />}
-              Post Project
+              {t.projects.post.submit}
             </button>
           )}
         </div>
