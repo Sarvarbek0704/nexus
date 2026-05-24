@@ -12,6 +12,7 @@ import { useAppSelector } from '@/store';
 import { toast } from 'sonner';
 import { ChevronLeft, Loader2, Save } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 const editSchema = z.object({
   title: z.string().min(10, 'Title must be at least 10 characters').max(150),
@@ -28,6 +29,7 @@ const editSchema = z.object({
 type EditForm = z.infer<typeof editSchema>;
 
 export default function EditProjectPage() {
+  const t = useT();
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const { user } = useAppSelector((s) => s.auth);
@@ -73,10 +75,10 @@ export default function EditProjectPage() {
   const onSubmit = async (data: EditForm) => {
     try {
       await updateProject({ id, body: { ...data, skills: selectedSkills } }).unwrap();
-      toast.success('Project updated successfully!');
+      toast.success(t.common.saved);
       router.push(`/projects/${id}`);
     } catch (err: any) {
-      toast.error(err?.data?.message ?? 'Failed to update project');
+      toast.error(err?.data?.message ?? t.common.error);
     }
   };
 
@@ -91,8 +93,8 @@ export default function EditProjectPage() {
   if (!project) {
     return (
       <div className="p-6 text-center">
-        <p className="text-gray-500">Project not found.</p>
-        <Link href="/projects/my" className="text-nexus-600 hover:underline mt-2 block">Back to My Projects</Link>
+        <p className="text-gray-500">{t.editProject.notFound}</p>
+        <Link href="/projects/my" className="text-nexus-600 hover:underline mt-2 block">{t.editProject.backToMyProjects}</Link>
       </div>
     );
   }
@@ -100,29 +102,29 @@ export default function EditProjectPage() {
   if (project.client?.id !== user?.id) {
     return (
       <div className="p-6 text-center">
-        <p className="text-gray-500">You don&apos;t have permission to edit this project.</p>
-        <Link href="/projects/my" className="text-nexus-600 hover:underline mt-2 block">Back to My Projects</Link>
+        <p className="text-gray-500">{t.editProject.noPermission}</p>
+        <Link href="/projects/my" className="text-nexus-600 hover:underline mt-2 block">{t.editProject.backToMyProjects}</Link>
       </div>
     );
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 max-w-3xl mx-auto">
       <Link href={`/projects/${id}`} className="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-900 dark:hover:text-white mb-5 transition-colors">
-        <ChevronLeft className="w-4 h-4" /> Back to Project
+        <ChevronLeft className="w-4 h-4" /> {t.editProject.back}
       </Link>
 
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Edit Project</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Update your project details.</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.editProject.title}</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t.editProject.subtitle}</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Basics</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.editProject.sections.basics}</h2>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Title *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.titleLabel ?? 'Title'} *</label>
             <input
               {...register('title')}
               className={cn('w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 dark:border-gray-700', errors.title && 'border-red-400')}
@@ -131,7 +133,7 @@ export default function EditProjectPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description *</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.descriptionLabel ?? 'Description'} *</label>
             <textarea
               {...register('description')}
               rows={6}
@@ -141,7 +143,7 @@ export default function EditProjectPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Requirements (optional)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.requirementsLabel ?? 'Requirements'} ({t.common.optional})</label>
             <textarea
               {...register('requirements')}
               rows={4}
@@ -151,49 +153,49 @@ export default function EditProjectPage() {
         </div>
 
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Details</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.editProject.sections.details}</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Category *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projectDetail.sidebar.category} *</label>
               <select
                 {...register('categoryId')}
                 className={cn('w-full px-4 py-2.5 text-sm border rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 dark:border-gray-700', errors.categoryId && 'border-red-400')}
               >
-                <option value="">Select category...</option>
+                <option value="">{t.projects.allCategories}...</option>
                 {categories.map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
               {errors.categoryId && <p className="text-xs text-red-500 mt-1">{errors.categoryId.message}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Experience Level</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.profilePage.professional.experienceLevel}</label>
               <select
                 {...register('experienceRequired')}
                 className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800"
               >
-                <option value="entry">Entry Level</option>
-                <option value="intermediate">Intermediate</option>
-                <option value="expert">Expert</option>
+                <option value="entry">{t.projects.entry}</option>
+                <option value="intermediate">{t.projects.intermediate}</option>
+                <option value="expert">{t.projects.expert}</option>
               </select>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Visibility</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.visibilityLabel ?? 'Visibility'}</label>
               <select
                 {...register('visibility')}
                 className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800"
               >
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-                <option value="invite_only">Invite Only</option>
+                <option value="public">{t.postProject?.visibilityOptions?.public ?? 'Public'}</option>
+                <option value="private">{t.postProject?.visibilityOptions?.private ?? 'Private'}</option>
+                <option value="invite_only">{t.postProject?.visibilityOptions?.invite_only ?? 'Invite Only'}</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Deadline</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.projectDetail.sidebar.deadline}</label>
               <input
                 {...register('deadline')}
                 type="date"
@@ -203,11 +205,11 @@ export default function EditProjectPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Skills ({selectedSkills.length}/15)</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t.postProject?.skillsLabel ?? 'Skills'} ({selectedSkills.length}/15)</label>
             <input
               value={skillSearch}
               onChange={(e) => setSkillSearch(e.target.value)}
-              placeholder="Search skills..."
+              placeholder={t.editProject.searchSkills}
               className="w-full px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 bg-white dark:bg-gray-800 mb-3"
             />
             <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto">
@@ -231,11 +233,11 @@ export default function EditProjectPage() {
         </div>
 
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-6 space-y-5">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Budget</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t.editProject.sections.budget}</h2>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Budget Min ($) *</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.budgetMinLabel ?? 'Budget Min ($)'} *</label>
               <input
                 {...register('budgetMin')}
                 type="number"
@@ -246,7 +248,7 @@ export default function EditProjectPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Budget Max ($)</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t.postProject?.budgetMaxLabel ?? 'Budget Max ($)'}</label>
               <input
                 {...register('budgetMax')}
                 type="number"
@@ -262,7 +264,7 @@ export default function EditProjectPage() {
             href={`/projects/${id}`}
             className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
-            Cancel
+            {t.editProject.cancel}
           </Link>
           <button
             type="submit"
@@ -270,7 +272,7 @@ export default function EditProjectPage() {
             className="flex items-center gap-2 px-5 py-2.5 bg-nexus-600 hover:bg-nexus-700 text-white rounded-lg font-medium text-sm transition-colors disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-            Save Changes
+            {t.editProject.save}
           </button>
         </div>
       </form>

@@ -10,17 +10,19 @@ import { Pagination } from '@/components/ui/Pagination';
 import { Loader2, Search, SlidersHorizontal, X, LayoutGrid, List } from 'lucide-react';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
-
-const SORT_OPTIONS = [
-  { value: 'createdAt:DESC', label: 'Newest First' },
-  { value: 'createdAt:ASC', label: 'Oldest First' },
-  { value: 'budget:DESC', label: 'Highest Budget' },
-  { value: 'budget:ASC', label: 'Lowest Budget' },
-  { value: 'deadline:ASC', label: 'Deadline Soon' },
-];
+import { useT } from '@/lib/i18n';
 
 export default function ProjectsPage() {
+  const t = useT();
   const searchParams = useSearchParams();
+
+  const SORT_OPTIONS = [
+    { value: 'createdAt:DESC', label: t.projectsPage.sort.newest },
+    { value: 'createdAt:ASC', label: t.projectsPage.sort.oldest },
+    { value: 'budget:DESC', label: t.projectsPage.sort.highestBudget },
+    { value: 'budget:ASC', label: t.projectsPage.sort.lowestBudget },
+    { value: 'deadline:ASC', label: t.projectsPage.sort.deadline },
+  ];
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState(searchParams.get('search') ?? '');
 
@@ -69,9 +71,9 @@ export default function ProjectsPage() {
       <div className="flex-1 p-6 space-y-5 overflow-auto">
         {/* Header */}
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Browse Projects</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.projectsPage.title}</h2>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            {meta?.total ? `${meta.total.toLocaleString()} projects available` : 'Find your next opportunity'}
+            {meta?.total ? `${meta.total.toLocaleString()} ${t.projectsPage.available}` : t.projectsPage.opportunity}
           </p>
         </div>
 
@@ -82,7 +84,7 @@ export default function ProjectsPage() {
             <input
               value={search}
               onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-              placeholder="Search projects by title, skills, or keywords..."
+              placeholder={t.projects.search}
               className="w-full pl-9 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500 focus:ring-1 focus:ring-nexus-500 transition-all"
             />
             {search && (
@@ -103,7 +105,7 @@ export default function ProjectsPage() {
               )}
             >
               <SlidersHorizontal className="w-4 h-4" />
-              Filters
+              {t.projects.filters}
               {activeFilterCount > 0 && (
                 <span className="bg-white text-nexus-600 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {activeFilterCount}
@@ -153,7 +155,7 @@ export default function ProjectsPage() {
               onClick={() => handleFilterChange({})}
               className="text-xs text-gray-500 hover:text-red-500 underline"
             >
-              Clear all
+              {t.projectsPage.clearAll}
             </button>
           </div>
         )}
@@ -166,8 +168,8 @@ export default function ProjectsPage() {
         ) : projects.length === 0 ? (
           <div className="text-center py-24">
             <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white">No projects found</h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">Try adjusting your filters or search terms.</p>
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t.projects.noResults}</h3>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">{t.projects.noResultsSub}</p>
           </div>
         ) : (
           <div className={cn(

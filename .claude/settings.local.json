@@ -58,7 +58,10 @@
       "Bash(curl -s http://localhost:5000/api/reviews/summary/0f162c10-96f1-481c-9f66-9710c0e416aa)",
       "Bash(curl -s http://localhost:5000/api/users/profile/0f162c10-96f1-481c-9f66-9710c0e416aa)",
       "Bash(curl -s \"http://localhost:5000/api/categories?limit=3\")",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(git commit -m ' *)",
+      "Bash(dir /s /b \"D:\\\\CLAUDE\\\\nexus\\\\.claude\\\\worktrees\\\\gallant-antonelli-89d2cb\\\\frontend\\\\app\\\\*.tsx\")",
+      "Bash(git add *)"
     ],
     "defaultMode": "bypassPermissions"
   }

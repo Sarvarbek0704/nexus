@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useGetNotificationsQuery, useMarkAllAsReadMutation, useMarkAsReadMutation } from '@/store/api/notificationsApi';
 import { formatRelativeTime } from '@/lib/utils';
@@ -6,6 +6,7 @@ import { Bell, CheckCheck, Loader2, Briefcase, FileText, DollarSign, MessageSqua
 import { Pagination } from '@/components/ui/Pagination';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
 const TYPE_ICONS: Record<string, any> = {
   bid_received: Briefcase,
@@ -34,6 +35,7 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 export default function NotificationsPage() {
+  const t = useT();
   const [page, setPage] = useState(1);
   const [onlyUnread, setOnlyUnread] = useState(false);
 
@@ -46,15 +48,15 @@ export default function NotificationsPage() {
   const unreadCount = notifications.filter((n: any) => !n.isRead).length;
 
   return (
-    <div className="p-6 space-y-5 max-w-3xl mx-auto">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-5 max-w-3xl mx-auto">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Notifications</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.notificationsPage.title}</h2>
           {unreadCount > 0 && (
-            <p className="text-gray-500 dark:text-gray-400 mt-1">{unreadCount} unread notifications</p>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{unreadCount} {t.notificationsPage.unread}</p>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
@@ -62,14 +64,14 @@ export default function NotificationsPage() {
               onChange={(e) => { setOnlyUnread(e.target.checked); setPage(1); }}
               className="accent-nexus-600"
             />
-            <span className="text-sm text-gray-600 dark:text-gray-400">Unread only</span>
+            <span className="text-sm text-gray-600 dark:text-gray-400">{t.notificationsPage.unreadOnly}</span>
           </label>
           {unreadCount > 0 && (
             <button
               onClick={() => markAllRead()}
               className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-nexus-600 dark:text-nexus-400 border border-nexus-200 dark:border-nexus-800 rounded-lg hover:bg-nexus-50 dark:hover:bg-nexus-950/30 transition-colors"
             >
-              <CheckCheck className="w-4 h-4" /> Mark all read
+              <CheckCheck className="w-4 h-4" /> {t.notificationsPage.markAllRead}
             </button>
           )}
         </div>
@@ -82,8 +84,8 @@ export default function NotificationsPage() {
       ) : notifications.length === 0 ? (
         <div className="text-center py-20">
           <Bell className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white">No notifications</h3>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">You're all caught up!</p>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white">{t.notificationsPage.noNotifications}</h3>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">{t.notificationsPage.allCaughtUp}</p>
         </div>
       ) : (
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 divide-y divide-gray-100 dark:divide-gray-800">
@@ -131,4 +133,3 @@ export default function NotificationsPage() {
     </div>
   );
 }
-

@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { Eye, EyeOff, Lock, Loader2, CheckCircle } from 'lucide-react';
 import { useResetPasswordMutation } from '@/store/api/authApi';
+import { useT } from '@/lib/i18n';
 
 const schema = z.object({
   password: z
@@ -24,6 +25,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function ResetPasswordPage() {
+  const t = useT();
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token') || '';
@@ -38,15 +40,15 @@ export default function ResetPasswordPage() {
 
   const password = watch('password') || '';
   const passwordChecks = [
-    { label: '8+ characters', valid: password.length >= 8 },
-    { label: 'Uppercase letter', valid: /[A-Z]/.test(password) },
-    { label: 'Lowercase letter', valid: /[a-z]/.test(password) },
-    { label: 'Number', valid: /\d/.test(password) },
+    { label: t.register.passwordChecks.chars, valid: password.length >= 8 },
+    { label: t.register.passwordChecks.uppercase, valid: /[A-Z]/.test(password) },
+    { label: t.register.passwordChecks.lowercase, valid: /[a-z]/.test(password) },
+    { label: t.register.passwordChecks.number, valid: /\d/.test(password) },
   ];
 
   const onSubmit = async (data: FormData) => {
     if (!token) {
-      toast.error('Invalid or missing reset token. Please request a new link.');
+      toast.error(t.authExtended.resetPassword.invalidLinkDesc);
       return;
     }
     try {
@@ -54,7 +56,7 @@ export default function ResetPasswordPage() {
       setDone(true);
       setTimeout(() => router.push('/login'), 3000);
     } catch (err: any) {
-      toast.error(err?.data?.message ?? 'Failed to reset password. The link may have expired.');
+      toast.error(err?.data?.message ?? t.common.error);
     }
   };
 
@@ -62,12 +64,12 @@ export default function ResetPasswordPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 p-4">
         <div className="text-center">
-          <p className="text-gray-900 dark:text-white font-semibold mb-2">Invalid reset link</p>
+          <p className="text-gray-900 dark:text-white font-semibold mb-2">{t.authExtended.resetPassword.invalidLink}</p>
           <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">
-            This link is missing a reset token. Please request a new password reset.
+            {t.authExtended.resetPassword.invalidLinkDesc}
           </p>
           <Link href="/forgot-password" className="text-nexus-600 hover:underline font-medium">
-            Request new link
+            {t.authExtended.resetPassword.requestNew}
           </Link>
         </div>
       </div>
@@ -81,12 +83,12 @@ export default function ResetPasswordPage() {
           <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-emerald-500" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Password reset!</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.authExtended.resetPassword.successTitle}</h1>
           <p className="text-gray-500 dark:text-gray-400 mb-4">
-            Your password has been updated. Redirecting to login...
+            {t.authExtended.resetPassword.successDesc}
           </p>
           <Link href="/login" className="text-nexus-600 hover:underline font-medium">
-            Go to login
+            {t.authExtended.resetPassword.goToLogin}
           </Link>
         </div>
       </div>
@@ -106,9 +108,9 @@ export default function ResetPasswordPage() {
           <div className="w-16 h-16 bg-nexus-100 dark:bg-nexus-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Lock className="w-8 h-8 text-nexus-600 dark:text-nexus-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create new password</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.authExtended.resetPassword.createNew}</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-            Your new password must be different from the old one.
+            {t.authExtended.resetPassword.createNewDesc}
           </p>
         </div>
 
@@ -116,14 +118,14 @@ export default function ResetPasswordPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                New password
+                {t.resetPassword.newPassword}
               </label>
               <div className="relative">
                 <input
                   {...register('password')}
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
-                  placeholder="Create a strong password"
+                  placeholder={t.register.passwordHint}
                   className="w-full px-4 py-2.5 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white"
                 />
                 <button
@@ -157,14 +159,14 @@ export default function ResetPasswordPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Confirm new password
+                {t.authExtended.resetPassword.confirmLabel}
               </label>
               <div className="relative">
                 <input
                   {...register('confirmPassword')}
                   type={showConfirm ? 'text' : 'password'}
                   autoComplete="new-password"
-                  placeholder="Repeat your password"
+                  placeholder={t.authExtended.resetPassword.confirmPlaceholder}
                   className="w-full px-4 py-2.5 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-nexus-500 focus:border-transparent bg-white dark:bg-gray-800 dark:text-white"
                 />
                 <button
@@ -188,16 +190,16 @@ export default function ResetPasswordPage() {
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                'Reset password'
+                t.resetPassword.reset
               )}
             </button>
           </form>
         </div>
 
         <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-          Remember your password?{' '}
+          {t.authExtended.resetPassword.rememberPassword}{' '}
           <Link href="/login" className="text-nexus-600 hover:underline font-medium">
-            Sign in
+            {t.authExtended.resetPassword.signIn}
           </Link>
         </p>
       </div>

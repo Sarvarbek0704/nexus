@@ -11,10 +11,12 @@ import { useAppSelector } from '@/store';
 import { formatRelativeTime } from '@/lib/utils';
 import { Send, Search, MessageSquare, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useT } from '@/lib/i18n';
 
-const POLL_INTERVAL = 5000; // 5 seconds
+const POLL_INTERVAL = 5000;
 
 export default function MessagesPage() {
+  const t = useT();
   const { user } = useAppSelector((s) => s.auth);
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [messageText, setMessageText] = useState('');
@@ -47,7 +49,6 @@ export default function MessagesPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Mark conversation as read when selected
   useEffect(() => {
     if (selectedConversation) {
       markRead(selectedConversation);
@@ -69,16 +70,15 @@ export default function MessagesPage() {
 
   return (
     <div className="flex h-[calc(100vh-4rem)]">
-      {/* Conversations Sidebar */}
-      <div className="w-80 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 flex flex-col">
+      <div className="w-72 sm:w-80 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 flex flex-col">
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-3">Messages</h2>
+          <h2 className="font-semibold text-gray-900 dark:text-white mb-3">{t.messages.title}</h2>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               value={conversationSearch}
               onChange={(e) => setConversationSearch(e.target.value)}
-              placeholder="Search conversations..."
+              placeholder={t.messages.search}
               className="w-full pl-9 pr-4 py-2 text-sm bg-gray-100 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-1 focus:ring-nexus-500"
             />
           </div>
@@ -92,7 +92,7 @@ export default function MessagesPage() {
           ) : filteredConversations.length === 0 ? (
             <div className="text-center py-12 px-4">
               <MessageSquare className="w-8 h-8 text-gray-300 mx-auto mb-2" />
-              <p className="text-sm text-gray-400">No conversations yet</p>
+              <p className="text-sm text-gray-400">{t.messages.noConversations}</p>
             </div>
           ) : (
             filteredConversations.map((conv: any) => {
@@ -136,7 +136,7 @@ export default function MessagesPage() {
                       </span>
                     </div>
                     <p className="text-xs text-gray-400 truncate mt-0.5">
-                      {conv.lastMessage?.content || 'No messages yet'}
+                      {conv.lastMessage?.content || t.messages.noMessages}
                     </p>
                   </div>
 
@@ -152,16 +152,14 @@ export default function MessagesPage() {
         </div>
       </div>
 
-      {/* Chat Area */}
       {!selectedConversation ? (
         <div className="flex-1 flex flex-col items-center justify-center gap-4 text-gray-400">
           <MessageSquare className="w-16 h-16 opacity-30" />
-          <p className="text-lg font-medium">Select a conversation</p>
-          <p className="text-sm">Choose a conversation from the left to start messaging</p>
+          <p className="text-lg font-medium">{t.messages.selectConversation}</p>
+          <p className="text-sm">{t.messages.selectConversationSub}</p>
         </div>
       ) : (
         <div className="flex-1 flex flex-col">
-          {/* Chat Header */}
           {selectedConv && (
             <div className="flex items-center gap-3 px-5 py-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
               <div className="w-9 h-9 rounded-full bg-nexus-100 dark:bg-nexus-900/50 flex items-center justify-center overflow-hidden">
@@ -178,13 +176,12 @@ export default function MessagesPage() {
                   {selectedConv.otherUser?.firstName} {selectedConv.otherUser?.lastName}
                 </p>
                 <p className="text-xs text-gray-400">
-                  {selectedConv.otherUser?.isOnline ? 'Online' : 'Offline'}
+                  {selectedConv.otherUser?.isOnline ? t.messages.online : t.messages.offline}
                 </p>
               </div>
             </div>
           )}
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto scrollbar-thin p-5 space-y-4">
             {loadingMessages ? (
               <div className="flex justify-center py-8">
@@ -192,7 +189,7 @@ export default function MessagesPage() {
               </div>
             ) : messages.length === 0 ? (
               <div className="text-center py-8 text-gray-400 text-sm">
-                No messages yet. Say hello!
+                {t.messages.noMessages}
               </div>
             ) : (
               messages.map((msg: any) => {
@@ -224,7 +221,6 @@ export default function MessagesPage() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
             <div className="flex items-end gap-3">
               <textarea
@@ -236,7 +232,7 @@ export default function MessagesPage() {
                     handleSend();
                   }
                 }}
-                placeholder="Type a message... (Enter to send)"
+                placeholder={t.messages.typePlaceholder}
                 rows={1}
                 className="flex-1 px-4 py-3 text-sm bg-gray-100 dark:bg-gray-800 border border-transparent rounded-xl focus:outline-none focus:border-nexus-500 focus:bg-white dark:focus:bg-gray-700 resize-none transition-all max-h-32"
               />

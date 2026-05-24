@@ -4,19 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useGetAdminProjectsQuery } from "@/store/api/projectsApi";
 import { formatCurrency, formatDate, getStatusColor } from "@/lib/utils";
-import {
-  Briefcase,
-  Search,
-  Loader2,
-  ArrowRight,
-  ExternalLink,
-} from "lucide-react";
+import { Briefcase, Search, Loader2, ExternalLink } from "lucide-react";
 import { Pagination } from "@/components/ui/Pagination";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 const STATUS_TABS = ["all", "open", "in_progress", "completed", "cancelled", "closed"];
 
 export default function AdminProjectsPage() {
+  const t = useT();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
@@ -32,32 +28,32 @@ export default function AdminProjectsPage() {
   const meta = data?.meta;
 
   return (
-    <div className="p-6 space-y-5">
+    <div className="p-4 sm:p-6 space-y-5">
       <div className="flex items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            All Projects
+            {t.adminExtended.projects.title}
           </h2>
           <p className="text-gray-500 dark:text-gray-400 mt-1">
-            {meta?.total ? `${meta.total.toLocaleString()} total projects` : "All platform projects"}
+            {meta?.total
+              ? `${meta.total.toLocaleString()} ${t.adminExtended.projects.subtitle}`
+              : t.adminExtended.projects.subtitleAll}
           </p>
         </div>
       </div>
 
-      {/* Search */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            placeholder="Search projects by title..."
+            placeholder={t.adminExtended.projects.search}
             className="w-full pl-9 pr-4 py-2.5 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:border-nexus-500"
           />
         </div>
       </div>
 
-      {/* Status Tabs */}
       <div className="flex flex-wrap gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl w-fit">
         {STATUS_TABS.map((s) => (
           <button
@@ -70,12 +66,11 @@ export default function AdminProjectsPage() {
                 : "text-gray-500 hover:text-gray-700 dark:hover:text-gray-300",
             )}
           >
-            {s.replace("_", " ")}
+            {s.replace(/_/g, " ")}
           </button>
         ))}
       </div>
 
-      {/* Projects Table */}
       <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 overflow-hidden">
         {isLoading ? (
           <div className="flex justify-center py-16">
@@ -84,16 +79,23 @@ export default function AdminProjectsPage() {
         ) : projects.length === 0 ? (
           <div className="text-center py-16 text-gray-400">
             <Briefcase className="w-10 h-10 mx-auto mb-3 opacity-40" />
-            <p>No projects found</p>
+            <p>{t.adminExtended.projects.noProjects}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-100 dark:border-gray-800">
-                  {["Project", "Status", "Type", "Budget", "Posted", ""].map((h) => (
+                  {[
+                    t.adminExtended.projects.headers.project,
+                    t.adminExtended.projects.headers.status,
+                    t.adminExtended.projects.headers.type,
+                    t.adminExtended.projects.headers.budget,
+                    t.adminExtended.projects.headers.posted,
+                    '',
+                  ].map((h, i) => (
                     <th
-                      key={h}
+                      key={i}
                       className="text-left px-5 py-3.5 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider"
                     >
                       {h}
@@ -129,7 +131,7 @@ export default function AdminProjectsPage() {
                           getStatusColor(project.status),
                         )}
                       >
-                        {project.status.replace("_", " ")}
+                        {project.status.replace(/_/g, " ")}
                       </span>
                     </td>
                     <td className="px-5 py-4 text-sm text-gray-500 dark:text-gray-400 capitalize">
@@ -139,7 +141,7 @@ export default function AdminProjectsPage() {
                       {project.budgetMin && project.budgetMax
                         ? `${formatCurrency(project.budgetMin)} – ${formatCurrency(project.budgetMax)}`
                         : project.budgetMin
-                          ? `From ${formatCurrency(project.budgetMin)}`
+                          ? `${t.adminExtended.projects.from} ${formatCurrency(project.budgetMin)}`
                           : project.hourlyRateMin
                             ? `${formatCurrency(project.hourlyRateMin)}/hr`
                             : "—"}
@@ -152,7 +154,7 @@ export default function AdminProjectsPage() {
                         href={`/projects/${project.id}`}
                         className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium text-nexus-600 dark:text-nexus-400 border border-nexus-200 dark:border-nexus-800 rounded-lg hover:bg-nexus-50 dark:hover:bg-nexus-950/30 transition-colors"
                       >
-                        View <ExternalLink className="w-3 h-3" />
+                        {t.adminExtended.projects.view} <ExternalLink className="w-3 h-3" />
                       </Link>
                     </td>
                   </tr>
@@ -164,11 +166,7 @@ export default function AdminProjectsPage() {
 
         {meta && (meta.totalPages ?? 1) > 1 && (
           <div className="p-5 border-t border-gray-100 dark:border-gray-800">
-            <Pagination
-              currentPage={page}
-              totalPages={meta.totalPages}
-              onPageChange={setPage}
-            />
+            <Pagination currentPage={page} totalPages={meta.totalPages} onPageChange={setPage} />
           </div>
         )}
       </div>

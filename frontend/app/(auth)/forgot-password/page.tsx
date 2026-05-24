@@ -8,6 +8,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { ArrowLeft, Loader2, Mail, CheckCircle } from 'lucide-react';
 import { useForgotPasswordMutation } from '@/store/api/authApi';
+import { useT } from '@/lib/i18n';
 
 const schema = z.object({
   email: z.string().email('Invalid email address'),
@@ -16,6 +17,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 export default function ForgotPasswordPage() {
+  const t = useT();
   const [sent, setSent] = useState(false);
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
@@ -28,7 +30,7 @@ export default function ForgotPasswordPage() {
       await forgotPassword(data).unwrap();
       setSent(true);
     } catch {
-      toast.error('Something went wrong. Please try again.');
+      toast.error(t.common.error);
     }
   };
 
@@ -39,20 +41,19 @@ export default function ForgotPasswordPage() {
           <div className="w-20 h-20 bg-nexus-100 dark:bg-nexus-900/30 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-nexus-500" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Check your inbox</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t.authExtended.forgotPassword.checkInbox}</h1>
           <p className="text-gray-500 dark:text-gray-400 mb-6">
-            If <strong className="text-gray-700 dark:text-gray-300">{getValues('email')}</strong> is registered,
-            we've sent a password reset link. It expires in 1 hour.
+            {t.authExtended.forgotPassword.checkInboxDesc.replace('{email}', getValues('email'))}
           </p>
           <p className="text-sm text-gray-400 mb-6">
-            Don't see it? Check your spam folder.
+            {t.authExtended.forgotPassword.checkSpam}
           </p>
           <Link
             href="/login"
             className="inline-flex items-center gap-2 text-nexus-600 hover:text-nexus-700 font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to login
+            {t.forgotPassword.backToLogin}
           </Link>
         </div>
       </div>
@@ -72,9 +73,9 @@ export default function ForgotPasswordPage() {
           <div className="w-16 h-16 bg-nexus-100 dark:bg-nexus-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Mail className="w-8 h-8 text-nexus-600 dark:text-nexus-400" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Forgot your password?</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t.forgotPassword.title}</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-            Enter your email and we'll send you a reset link.
+            {t.forgotPassword.subtitle}
           </p>
         </div>
 
@@ -82,7 +83,7 @@ export default function ForgotPasswordPage() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Email address
+                {t.forgotPassword.emailLabel}
               </label>
               <input
                 {...register('email')}
@@ -104,7 +105,7 @@ export default function ForgotPasswordPage() {
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                'Send reset link'
+                t.forgotPassword.sendLink
               )}
             </button>
           </form>
@@ -116,7 +117,7 @@ export default function ForgotPasswordPage() {
             className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
-            Back to login
+            {t.forgotPassword.backToLogin}
           </Link>
         </div>
       </div>
