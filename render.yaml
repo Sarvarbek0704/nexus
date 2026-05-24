@@ -31,31 +31,31 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 30d
       - key: GOOGLE_CLIENT_ID
-        sync: false
+        value: 165839593708-39ukqo2u3raohkrit8n5k97n54pctrtp.apps.googleusercontent.com
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_CALLBACK_URL
-        sync: false
+        value: https://nexus-backend.onrender.com/api/auth/google/callback
       - key: GITHUB_CLIENT_ID
-        sync: false
+        value: Ov23liBMTBHybYoeARuz
       - key: GITHUB_CLIENT_SECRET
         sync: false
       - key: GITHUB_CALLBACK_URL
-        sync: false
+        value: https://nexus-backend.onrender.com/api/auth/github/callback
       - key: MAIL_HOST
-        sync: false
+        value: smtp.gmail.com
       - key: MAIL_PORT
         value: 587
       - key: MAIL_SECURE
         value: false
       - key: MAIL_USER
-        sync: false
+        value: coolsarvar2007@gmail.com
       - key: MAIL_PASS
         sync: false
       - key: MAIL_FROM_NAME
         value: Nexus
       - key: MAIL_FROM_EMAIL
-        sync: false
+        value: coolsarvar2007@gmail.com
       - key: PLATFORM_FEE_PERCENT
         value: 10
       - key: THROTTLE_TTL
