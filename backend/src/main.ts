@@ -31,7 +31,13 @@ async function bootstrap() {
   }
 
   app.enableCors({
-    origin: [frontendUrl, 'http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+      frontendUrl,
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://frontend-eight-smoky-31.vercel.app',
+      /\.vercel\.app$/,
+    ],
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true,
