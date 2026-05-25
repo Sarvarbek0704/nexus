@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { JwtModule } from '@nestjs/jwt';
 import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 
 import appConfig from './config/app.config';
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { DemoGuard } from './common/guards/demo.guard';
 
+import { User } from './database/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { ProjectsModule } from './modules/projects/projects.module';
@@ -57,6 +59,13 @@ import { StatsModule } from './modules/stats/stats.module';
       }),
     }),
 
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('jwt.secret'),
+      }),
+    }),
+    TypeOrmModule.forFeature([User]),
     MailerModule,
     AuthModule,
     UsersModule,
