@@ -27,7 +27,7 @@ export default function ForgotPasswordPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
-      await forgotPassword(data).unwrap();
+      await forgotPassword(data as { email: string }).unwrap();
       setSent(true);
     } catch {
       toast.error(t.common.error);
