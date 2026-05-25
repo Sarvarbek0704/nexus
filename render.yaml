@@ -35,13 +35,13 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_CALLBACK_URL
-        value: https://nexus-backend.onrender.com/api/auth/google/callback
+        value: https://nexus-backend-c8ek.onrender.com/api/auth/google/callback
       - key: GITHUB_CLIENT_ID
         value: Ov23liBMTBHybYoeARuz
       - key: GITHUB_CLIENT_SECRET
         sync: false
       - key: GITHUB_CALLBACK_URL
-        value: https://nexus-backend.onrender.com/api/auth/github/callback
+        value: https://nexus-backend-c8ek.onrender.com/api/auth/github/callback
       - key: MAIL_HOST
         value: smtp.gmail.com
       - key: MAIL_PORT
