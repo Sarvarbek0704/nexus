@@ -101,3 +101,4 @@ export const getToken = () =>
   Cookies.get('accessToken') || localStorage.getItem('accessToken');
 
 export default api;
+
