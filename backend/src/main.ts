@@ -31,24 +31,10 @@ async function bootstrap() {
   }
 
   app.enableCors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (mobile apps, curl, etc.)
-      if (!origin) return callback(null, true);
-      const allowed = [
-        frontendUrl,
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'https://frontend-eight-smoky-31.vercel.app',
-      ];
-      if (allowed.includes(origin) || origin.endsWith('.vercel.app')) {
-        callback(null, true);
-      } else {
-        callback(null, true); // allow all for now
-      }
-    },
+    origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    credentials: true,
+    credentials: false,
   });
 
   app.setGlobalPrefix('api', { exclude: [] });
