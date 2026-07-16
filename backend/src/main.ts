@@ -30,12 +30,49 @@ async function bootstrap() {
     app.use(morgan('dev'));
   }
 
+  // CORS_ORIGINS is a comma-separated allow-list; entries may end in `*` to
+  // match a prefix, which is what Vercel preview deployments need.
+  //
+  // This was `origin: '*'`, landed as "temporarily" while chasing a preview
+  // URL that would not connect. It is survivable — auth is a Bearer header,
+  // not a cookie, so a hostile page cannot ride along on a session it does
+  // not have — but it means any origin may call this API and read the reply,
+  // and nothing here says which frontends are supposed to exist. Outside
+  // production it stays open, because that is where the friction was.
+  const corsOrigins = (configService.get<string>('CORS_ORIGINS') ?? '')
+    .split(',')
+    .map((o) => o.trim())
+    .filter(Boolean);
+  const isProduction = configService.get('app.nodeEnv') === 'production';
+
   app.enableCors({
-    origin: '*',
+    origin: isProduction
+      ? (origin, callback) => {
+          // Same-origin and server-to-server requests send no Origin header.
+          if (!origin) return callback(null, true);
+          const allowed = corsOrigins.some((rule) =>
+            rule.endsWith('*')
+              ? origin.startsWith(rule.slice(0, -1))
+              : origin === rule,
+          );
+          return allowed
+            ? callback(null, true)
+            : callback(new Error(`Origin not allowed by CORS: ${origin}`), false);
+        }
+      : true,
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: false,
   });
+
+  if (isProduction && corsOrigins.length === 0) {
+    // Refusing to boot beats booting with an API no browser can reach and no
+    // obvious reason why.
+    throw new Error(
+      'CORS_ORIGINS is empty. Set it to the frontend origins that may call this API, ' +
+        'comma-separated (a trailing * matches a prefix, e.g. https://nexus-*.vercel.app).',
+    );
+  }
 
   app.setGlobalPrefix('api', { exclude: [] });
 

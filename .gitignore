@@ -9,3 +9,7 @@ frontend/.env.local
 frontend/node_modules
 
 /frontend/.next
+# dev debris
+backend.log
+*.log
+check_users_schema.js

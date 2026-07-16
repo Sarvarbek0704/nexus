@@ -258,13 +258,43 @@ export class MilestonesService {
     await queryRunner.startTransaction();
 
     try {
-      const platformFee = Number(milestone.amount) * (Number(contract.platformFeePercent) / 100);
-      const netAmount = Number(milestone.amount) - platformFee;
+      // The fee and the freelancer's share must add back up to the milestone
+      // amount, exactly, every time. Postgres rounds them to the column's two
+      // decimals on the way in, so whether that holds is decided by how they
+      // are derived — not by how carefully they are computed.
+      //
+      // Deriving both independently in float did not hold. On a $0.05
+      // milestone at 10%: fee 0.005 rounds up to 0.01, net 0.045 rounds up to
+      // 0.05, and the platform pays out 0.06 while debiting escrow 0.05. The
+      // cent comes from nowhere. Float made it worse but was not the cause —
+      // two independent roundings were.
+      //
+      // So the fee is rounded once, in numeric, and the net is *defined* as
+      // the remainder. Their sum is the amount by construction.
+      const [split]: Array<{ platformFee: string; netAmount: string }> =
+        await queryRunner.query(
+          `SELECT round($1::numeric * $2::numeric / 100, 2) AS "platformFee",
+                  $1::numeric - round($1::numeric * $2::numeric / 100, 2) AS "netAmount"`,
+          [milestone.amount, contract.platformFeePercent],
+        );
+      const platformFee = split.platformFee;
+      const netAmount = split.netAmount;
 
-      await queryRunner.manager.increment(User, { id: contract.freelancerId }, 'walletBalance', netAmount);
-      await queryRunner.manager.decrement(User, { id: clientId }, 'escrowBalance', Number(milestone.escrowAmount));
-      await queryRunner.manager.increment(Contract, { id: contract.id }, 'paidAmount', Number(milestone.amount));
-      await queryRunner.manager.decrement(Contract, { id: contract.id }, 'escrowAmount', Number(milestone.escrowAmount));
+      await queryRunner.query(
+        `UPDATE "users" SET "walletBalance" = "walletBalance" + $1::numeric WHERE "id" = $2`,
+        [netAmount, contract.freelancerId],
+      );
+      await queryRunner.query(
+        `UPDATE "users" SET "escrowBalance" = "escrowBalance" - $1::numeric WHERE "id" = $2`,
+        [milestone.escrowAmount, clientId],
+      );
+      await queryRunner.query(
+        `UPDATE "contracts"
+            SET "paidAmount"   = "paidAmount"   + $1::numeric,
+                "escrowAmount" = "escrowAmount" - $2::numeric
+          WHERE "id" = $3`,
+        [milestone.amount, milestone.escrowAmount, contract.id],
+      );
 
       await queryRunner.manager.save(Payment, {
         transactionId: generateTransactionId(),
@@ -276,8 +306,16 @@ export class MilestonesService {
         status: PaymentStatus.COMPLETED,
         method: PaymentMethod.WALLET,
         amount: milestone.amount,
-        platformFee,
-        netAmount,
+        // Every `decimal` column in this schema is annotated `number` and
+        // arrives as a `string` — TypeORM does not convert them and there is
+        // no transformer. So `milestone.amount` above is already a string at
+        // runtime and slips through only because its annotation is wrong too.
+        // These two are cast rather than rounded through a float: the cast
+        // records the mismatch, where `Number(...)` would hide it and lose the
+        // exactness the numeric arithmetic above exists to preserve.
+        // Fixing the annotations project-wide is specified in docs/.
+        platformFee: platformFee as unknown as number,
+        netAmount: netAmount as unknown as number,
         currency: contract.currency || 'USD',
         description: `Payment for milestone: ${milestone.title}`,
         processedAt: new Date(),
@@ -293,8 +331,8 @@ export class MilestonesService {
         type: PaymentType.PLATFORM_FEE,
         status: PaymentStatus.COMPLETED,
         method: PaymentMethod.WALLET,
-        amount: platformFee,
-        netAmount: platformFee,
+        amount: platformFee as unknown as number,
+        netAmount: platformFee as unknown as number,
         currency: contract.currency || 'USD',
         description: 'Platform fee',
         processedAt: new Date(),
@@ -321,7 +359,7 @@ export class MilestonesService {
         userId: contract.freelancerId,
         type: NotificationType.PAYMENT_RECEIVED,
         title: 'Payment Received!',
-        message: `$${netAmount.toFixed(2)} received for milestone: ${milestone.title}`,
+        message: `$${netAmount} received for milestone: ${milestone.title}`,
         link: `/contracts/${contract.id}`,
         relatedEntityId: milestone.id,
         relatedEntityType: 'milestone',

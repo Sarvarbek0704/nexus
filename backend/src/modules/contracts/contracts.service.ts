@@ -193,18 +193,42 @@ export class ContractsService {
     if (!milestone) throw new NotFoundException('Milestone not found');
     if (milestone.isEscrowFunded) throw new BadRequestException('Escrow already funded');
 
-    const client = await this.userRepo.findOne({ where: { id: clientId } });
-    if (Number(client.walletBalance) < Number(milestone.amount)) {
-      throw new BadRequestException('Insufficient wallet balance');
-    }
-
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.decrement(User, { id: clientId }, 'walletBalance', Number(milestone.amount));
-      await queryRunner.manager.increment(User, { id: clientId }, 'escrowBalance', Number(milestone.amount));
+      // The balance check and the debit are one statement, deliberately.
+      //
+      // They used to be two: a findOne + `if (balance < amount) throw`, both
+      // before the transaction even opened, followed by an unconditional
+      // decrement. Two concurrent requests would both read the same balance,
+      // both pass the check, and both debit — funding escrow with money that
+      // was never there and leaving the wallet negative. Nothing in the schema
+      // forbids a negative balance, so the row simply went below zero.
+      //
+      // Postgres evaluates `WHERE "walletBalance" >= $1` against the row it is
+      // about to lock, so a losing concurrent update sees the already-debited
+      // balance and matches nothing. Zero rows back means insufficient funds.
+      // This relies on READ COMMITTED, which is the default here.
+      //
+      // The arithmetic stays in `numeric` for the same reason it is `numeric`
+      // in the schema: `Number(milestone.amount)` was pulling money through a
+      // float64, and TypeORM hands `decimal` back as a string anyway, so the
+      // `amount: number` annotation was never true at runtime.
+      const debited: Array<{ walletBalance: string }> = await queryRunner.query(
+        `UPDATE "users"
+            SET "walletBalance" = "walletBalance" - $1::numeric,
+                "escrowBalance" = "escrowBalance" + $1::numeric
+          WHERE "id" = $2
+            AND "walletBalance" >= $1::numeric
+      RETURNING "walletBalance"`,
+        [milestone.amount, clientId],
+      );
+
+      if (debited.length === 0) {
+        throw new BadRequestException('Insufficient wallet balance');
+      }
 
       await queryRunner.manager.update(Milestone, milestoneId, {
         isEscrowFunded: true,

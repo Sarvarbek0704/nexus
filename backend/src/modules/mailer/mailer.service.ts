@@ -219,7 +219,7 @@ export class MailerService {
     }).catch((e) => this.logger.error(`sendBidAcceptedEmail failed`, e));
   }
 
-  async sendPaymentReceivedEmail(to: string, firstName: string, amount: number, milestoneTitle: string): Promise<void> {
+  async sendPaymentReceivedEmail(to: string, firstName: string, amount: string, milestoneTitle: string): Promise<void> {
     const fromName = this.configService.get<string>('mail.fromName') || 'Nexus';
     const fromEmail = this.configService.get<string>('mail.fromEmail') || 'noreply@nexus.com';
     const frontendUrl = this.configService.get<string>('app.frontendUrl');
@@ -240,7 +240,7 @@ export class MailerService {
                 </p>
                 <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:24px;text-align:center;margin-bottom:32px;">
                   <p style="margin:0 0 4px;color:#16a34a;font-size:13px;font-weight:500;text-transform:uppercase;letter-spacing:1px;">Amount Received</p>
-                  <p style="margin:0;color:#15803d;font-size:40px;font-weight:700;">$${amount.toFixed(2)}</p>
+                  <p style="margin:0;color:#15803d;font-size:40px;font-weight:700;">$${amount}</p>
                   <p style="margin:8px 0 0;color:#4ade80;font-size:13px;">For: ${milestoneTitle}</p>
                 </div>
                 <table cellpadding="0" cellspacing="0">
@@ -263,7 +263,7 @@ export class MailerService {
     await this.transporter.sendMail({
       from: `"${fromName}" <${fromEmail}>`,
       to,
-      subject: `💰 Payment received: $${amount.toFixed(2)} — ${milestoneTitle}`,
+      subject: `💰 Payment received: $${amount} — ${milestoneTitle}`,
       html,
     }).catch((e) => this.logger.error(`sendPaymentReceivedEmail failed`, e));
   }
