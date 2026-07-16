@@ -42,8 +42,14 @@ import { Conversation, ConversationType } from './entities/conversation.entity';
 import { BidMilestone } from './entities/bid-milestone.entity';
 
 // ── DataSource ────────────────────────────────────────────────────────────────
-const DB_URL =
-  'postgresql://neondb_owner:npg_wP8WNIsZU7Ba@ep-winter-dream-alxl2vbi-pooler.c-3.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require';
+// The connection string comes from the environment. It used to be hardcoded
+// here — a live Neon database URL, password and all, committed to a public
+// repository. That credential must be rotated in Neon; removing it from the
+// code stops it leaking again but does not un-leak what is already in history.
+const DB_URL = process.env.DATABASE_URL;
+if (!DB_URL) {
+  throw new Error('DATABASE_URL is not set. Copy .env.example to .env and fill it in.');
+}
 
 const AppDataSource = new DataSource({
   type: 'postgres',
