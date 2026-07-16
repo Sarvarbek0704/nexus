@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ThrottlerModule } from '@nestjs/throttler';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 
 import appConfig from './config/app.config';
@@ -76,6 +76,11 @@ import { StatsModule } from './modules/stats/stats.module';
   providers: [
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },
     { provide: APP_INTERCEPTOR, useClass: TransformInterceptor },
+    // ThrottlerModule was configured above and THROTTLE_TTL/THROTTLE_LIMIT are
+    // set in render.yaml, but nothing ever registered the guard — so the limit
+    // was documented, deployed, and enforced nowhere. Login and the six-digit
+    // OTP were open to unlimited attempts.
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: DemoGuard },
   ],
 })

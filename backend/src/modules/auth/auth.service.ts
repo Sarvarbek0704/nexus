@@ -19,7 +19,7 @@ import {
 import { FreelancerProfile } from "../../database/entities/freelancer-profile.entity";
 import { ClientProfile } from "../../database/entities/client-profile.entity";
 import { AgencyProfile } from "../../database/entities/agency-profile.entity";
-import { RegisterDto } from "./dto/register.dto";
+import { RegisterDto, SELF_ASSIGNABLE_ROLES } from "./dto/register.dto";
 import {
   LoginDto,
   ForgotPasswordDto,
@@ -66,6 +66,15 @@ export class AuthService {
       const username = generateUsername(dto.firstName, dto.lastName);
       const otp = this.generateOtp();
       const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      // Second line of defence. The DTO already rejects a self-assigned admin,
+      // but this is a public endpoint writing a privilege column: if a future
+      // caller reaches this method around the validation pipe — another
+      // service, a seed, a test helper — the escalation comes back silently.
+      // The check is cheap and the failure it prevents is not.
+      if (dto.role && !SELF_ASSIGNABLE_ROLES.includes(dto.role)) {
+        throw new BadRequestException('Invalid role');
+      }
 
       const user = queryRunner.manager.create(User, {
         email: dto.email.toLowerCase(),

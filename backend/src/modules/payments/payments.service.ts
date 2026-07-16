@@ -102,17 +102,31 @@ export class PaymentsService {
   async withdraw(userId: string, amount: number, method: PaymentMethod) {
     if (amount < 10) throw new BadRequestException('Minimum withdrawal is $10');
 
-    const user = await this.userRepo.findOne({ where: { id: userId } });
-    if (Number(user.walletBalance) < amount) {
-      throw new BadRequestException('Insufficient wallet balance');
-    }
-
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.decrement(User, { id: userId }, 'walletBalance', amount);
+      // Same shape as fundMilestone in contracts.service.ts, and for the same
+      // reason: the read, the comparison and the debit have to be one
+      // statement or two concurrent withdrawals both pass a check against the
+      // same balance and both debit. Here it matters more — a withdrawal is
+      // money leaving the system, not moving inside it.
+      //
+      // Nothing in the schema forbids a negative balance, so there is no
+      // backstop underneath this. See docs/03-money-and-escrow.md §8.
+      const debited: Array<{ walletBalance: string }> = await queryRunner.query(
+        `UPDATE "users"
+            SET "walletBalance" = "walletBalance" - $1::numeric
+          WHERE "id" = $2
+            AND "walletBalance" >= $1::numeric
+      RETURNING "walletBalance"`,
+        [amount, userId],
+      );
+
+      if (debited.length === 0) {
+        throw new BadRequestException('Insufficient wallet balance');
+      }
 
       const payment = queryRunner.manager.create(Payment, {
         transactionId: generateTransactionId(),
