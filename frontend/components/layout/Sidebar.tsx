@@ -16,6 +16,7 @@ import {
 import { cn } from '@/lib/utils';
 import { UserRole } from '@/types';
 import { useT } from '@/lib/i18n';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -162,7 +163,7 @@ export function Sidebar() {
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2" onClick={handleNavClick}>
             <div className="w-8 h-8 bg-nexus-600 rounded-lg flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-bold text-sm">N</span>
+              <NexusMark className="w-5 h-5 text-white" />
             </div>
             <span className={cn('font-bold text-lg text-gray-900 dark:text-white transition-all', !sidebarOpen && 'lg:hidden')}>
               Nexus

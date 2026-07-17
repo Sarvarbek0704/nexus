@@ -13,6 +13,7 @@ import { setUser } from '@/store/slices/authSlice';
 import { setTokens } from '@/lib/api';
 import { useAppDispatch } from '@/store';
 import { useT } from '@/lib/i18n';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 const registerSchema = z.object({
   firstName: z.string().min(2).max(50),
@@ -72,7 +73,7 @@ export default function RegisterPage() {
         <div className="text-center mb-6 sm:mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-4 sm:mb-6">
             <div className="w-10 h-10 bg-nexus-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
+              <NexusMark className="w-6 h-6 text-white" />
             </div>
             <span className="font-bold text-2xl">Nexus</span>
           </Link>

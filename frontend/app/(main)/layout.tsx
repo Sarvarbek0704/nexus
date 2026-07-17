@@ -11,6 +11,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { Topbar } from '@/components/layout/Topbar';
 import { Loader2 } from 'lucide-react';
 import Cookies from 'js-cookie';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
@@ -59,7 +60,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 bg-nexus-100 rounded-full flex items-center justify-center mx-auto animate-pulse">
-            <span className="text-nexus-600 font-bold text-2xl">N</span>
+            <NexusMark className="w-9 h-9 text-nexus-600" />
           </div>
           <Loader2 className="w-6 h-6 text-nexus-600 animate-spin mx-auto" />
         </div>

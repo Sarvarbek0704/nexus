@@ -9,6 +9,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Loader2, Mail, CheckCircle } from 'lucide-react';
 import { useForgotPasswordMutation } from '@/store/api/authApi';
 import { useT } from '@/lib/i18n';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 const schema = z.object({
   email: z.string().email('Invalid email address'),
@@ -66,7 +67,7 @@ export default function ForgotPasswordPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
             <div className="w-10 h-10 bg-nexus-600 rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
+              <NexusMark className="w-6 h-6 text-white" />
             </div>
             <span className="font-bold text-2xl">Nexus</span>
           </Link>

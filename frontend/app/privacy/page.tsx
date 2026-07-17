@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -70,7 +71,7 @@ export default function PrivacyPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link href="/" className="inline-flex items-center gap-2">
             <div className="w-8 h-8 bg-nexus-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">N</span>
+              <NexusMark className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-lg text-gray-900 dark:text-white">Nexus</span>
           </Link>

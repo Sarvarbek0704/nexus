@@ -14,6 +14,7 @@ import { setTokens } from '@/lib/api';
 import { useAppDispatch } from '@/store';
 import { useI18n, useT, LANGUAGE_LABELS, Language } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
+import { NexusMark } from '@/components/shared/AppLogo';
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -61,7 +62,7 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-nexus-600 to-nexus-900 flex-col justify-between p-12">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
-            <span className="text-nexus-600 font-bold text-xl">N</span>
+            <NexusMark className="w-6 h-6 text-nexus-600" />
           </div>
           <span className="text-white font-bold text-2xl">Nexus</span>
         </div>
@@ -97,7 +98,7 @@ export default function LoginPage() {
           <div className="flex items-center justify-between lg:hidden">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 bg-nexus-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold">N</span>
+                <NexusMark className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl">Nexus</span>
             </Link>
