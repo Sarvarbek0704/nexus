@@ -34,9 +34,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       }
     } else if (exception instanceof Error) {
       message = exception.message;
-      if (process.env.NODE_ENV !== 'production') {
-        this.logger.error(`Unhandled exception: ${exception.message}`, exception.stack);
-      }
+      // A 500 is a server bug — always log it (with the route), even in
+      // production. The client still gets a masked message below.
+      this.logger.error(
+        `Unhandled exception on ${request.method} ${request.url}: ${exception.message}`,
+        exception.stack,
+      );
     }
 
     if (status === HttpStatus.INTERNAL_SERVER_ERROR && process.env.NODE_ENV === 'production') {

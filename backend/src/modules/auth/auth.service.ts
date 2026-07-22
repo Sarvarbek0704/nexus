@@ -259,15 +259,20 @@ export class AuthService {
   }
 
   async oauthLogin(oauthUser: any, role?: UserRole) {
+    // Match by email OR provider id. Matching on email alone (not
+    // email+provider) means the same person can sign in with Google one time
+    // and GitHub the next without hitting the unique-email constraint.
     let user = await this.userRepo.findOne({
-      where: [
-        {
-          email: oauthUser.email,
-          provider: oauthUser.provider as AuthProvider,
-        },
-        { providerId: oauthUser.providerId },
-      ],
+      where: [{ email: oauthUser.email }, { providerId: oauthUser.providerId }],
     });
+
+    // Link this provider to an existing account that has no provider id yet.
+    if (user && !user.providerId && oauthUser.providerId) {
+      await this.userRepo.update(user.id, {
+        providerId: oauthUser.providerId,
+        provider: oauthUser.provider as AuthProvider,
+      });
+    }
 
     if (!user) {
       const queryRunner = this.dataSource.createQueryRunner();
@@ -281,7 +286,7 @@ export class AuthService {
         );
         user = queryRunner.manager.create(User, {
           email: oauthUser.email,
-          firstName: oauthUser.firstName,
+          firstName: oauthUser.firstName || oauthUser.email.split("@")[0],
           lastName: oauthUser.lastName || "",
           avatar: oauthUser.avatar,
           provider: oauthUser.provider as AuthProvider,

@@ -32,7 +32,8 @@ export function generateSlug(name: string): string {
 }
 
 export function generateUsername(firstName: string, lastName: string): string {
-  const base = `${firstName.toLowerCase()}${lastName.toLowerCase()}`.replace(/[^a-z0-9]/g, '');
+  const base =
+    `${firstName || ''}${lastName || ''}`.toLowerCase().replace(/[^a-z0-9]/g, '') || 'user';
   const random = Math.floor(Math.random() * 9999);
   return `${base}${random}`;
 }
