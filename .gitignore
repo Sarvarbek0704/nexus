@@ -13,3 +13,9 @@ frontend/node_modules
 backend.log
 *.log
 check_users_schema.js
+
+# Dizayn referens + internal promptlar (public repoga kirmaydi)
+*.zip
+design-handoff/
+*-PROMPT.md
+*-prompt.md
